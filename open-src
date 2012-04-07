@@ -1,0 +1,2 @@
+#!/bin/sh
+find Graphics -type f -exec emacsclient -n {} +
