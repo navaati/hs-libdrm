@@ -1,0 +1,5 @@
+out/
+libkms.h
+xf86drmMode.h
+open-src
+main
