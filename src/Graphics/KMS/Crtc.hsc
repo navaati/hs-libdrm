@@ -36,7 +36,7 @@ peekCrtc ptr = do
     [ (#p x), (#p y)
     , (#p width), (#p height)]
   gammaSize <- (#p gamma_size) ptr
-  if fbId == (0 :: Word32)
+  if fbId == 0
     then return $ DisconnectedCrtc cId (x,y) (w,h) gammaSize
     else do
     modeValid <- fmap toBool ((#p mode_valid) ptr :: IO CInt)
