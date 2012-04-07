@@ -1,0 +1,25 @@
+name: kms
+version: 0.1
+license: GPL
+author: Léo Gillot-Lamure
+maintainer: leo.gillot@navaati.net
+category: System
+build-type: Simple
+cabal-version: >=1.8
+
+library
+  hs-source-dirs: src
+  exposed-modules: Graphics.KMS.Types, Graphics.KMS.Crtc,
+                   Graphics.KMS.ModeInfo, Graphics.KMS.Connector,
+                   Graphics.KMS.Utils, Graphics.KMS.Encoder,
+                   Graphics.KMS.Resources
+  build-depends: base, unix
+  extensions: UnicodeSyntax, ImplicitParams, ForeignFunctionInterface
+  build-tools: hsc2hs
+  include-dirs: /usr/include/libdrm, /usr/include/libkms
+  extra-libraries: drm, kms
+
+executable main
+  main-is: main.hs
+  build-depends: base, kms
+  extensions: UnicodeSyntax, ImplicitParams

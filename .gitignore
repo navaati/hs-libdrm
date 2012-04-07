@@ -1,4 +1,3 @@
-out/
+dist/
 libkms.h
 xf86drmMode.h
-main

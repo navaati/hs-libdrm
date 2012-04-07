@@ -1,2 +1,3 @@
 #!/bin/sh
-find Graphics -type f -exec emacsclient -n {} +
+find src -type f -exec emacsclient -n {} +
+emacsclient -n main.hs
