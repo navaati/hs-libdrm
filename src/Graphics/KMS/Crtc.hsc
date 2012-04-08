@@ -3,6 +3,8 @@ module Graphics.KMS.Crtc where
 import Foreign
 import Foreign.C
 import System.Posix
+import Data.Reflection
+import Data.Proxy
 
 #include<stdint.h>
 #include<xf86drmMode.h>
@@ -10,24 +12,24 @@ import System.Posix
 import Graphics.KMS.ModeInfo
 import Graphics.KMS.Types
 
-data Crtc = ConnectedCrtc
-            { crtcId :: CrtcId
-            , crtcFbId :: FbId
-            , crtcPosition :: (Word32,Word32)
-            , crtcPxSize :: (Word32,Word32)
-            , crtcMode :: ModeInfo
-            , crtcGammaSize :: Int
-            } |
-            DisconnectedCrtc
-            { crtcId :: CrtcId
-            , crtcPosition :: (Word32,Word32)
-            , crtcPxSize :: (Word32,Word32)
-            , crtcGammaSize :: Int
-            } deriving (Show)
+data Crtc drm = ConnectedCrtc
+                { crtcId :: CrtcId drm
+                , crtcFbId :: FbId drm
+                , crtcPosition :: (Word32,Word32)
+                , crtcPxSize :: (Word32,Word32)
+                , crtcMode :: ModeInfo
+                , crtcGammaSize :: Int
+                } |
+                DisconnectedCrtc
+                { crtcId :: CrtcId drm
+                , crtcPosition :: (Word32,Word32)
+                , crtcPxSize :: (Word32,Word32)
+                , crtcGammaSize :: Int
+                } deriving (Show)
               
 #define hsc_p(field) hsc_peek(drmModeCrtc, field)
 
-peekCrtc :: Ptr Crtc -> IO Crtc
+peekCrtc :: CrtcPtr drm -> IO (Crtc drm)
 peekCrtc ptr = do
   cId <- (#p crtc_id) ptr
   fbId <- (#p buffer_id) ptr
@@ -44,14 +46,18 @@ peekCrtc ptr = do
     mode <- (#p mode) ptr
     return $ ConnectedCrtc cId (FbId fbId) (x,y) (w,h) mode gammaSize
 
-getCrtc :: (?drm :: Drm) ⇒ CrtcId -> IO Crtc
+getCrtc :: ∀drm. (drm `Reifies` Drm) ⇒
+           CrtcId drm → IO (Crtc drm)
 getCrtc cId = do
-  ptr <- throwErrnoIfNull "drmModeGetCrtc" (drmModeGetCrtc ?drm cId)
+  ptr <- throwErrnoIfNull "drmModeGetCrtc" $
+         drmModeGetCrtc (reflect (Proxy :: Proxy drm)) cId
   crtc <- peekCrtc ptr
   drmModeFreeCrtc ptr
   return crtc
 
+type CrtcPtr drm = Ptr (Crtc drm)
+
 foreign import ccall "drmModeGetCrtc"
-  drmModeGetCrtc :: Drm -> CrtcId -> IO (Ptr Crtc)
+  drmModeGetCrtc :: Drm -> CrtcId drm -> IO (CrtcPtr drm)
 foreign import ccall "drmModeFreeCrtc"
-  drmModeFreeCrtc :: Ptr Crtc -> IO ()
+  drmModeFreeCrtc :: CrtcPtr drm -> IO ()

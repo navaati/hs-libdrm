@@ -1,4 +1,8 @@
+{-# LANGUAGE UnicodeSyntax, FlexibleContexts, ScopedTypeVariables, TypeOperators #-}
+
 import Control.Monad
+import Data.Reflection
+import Data.Proxy
 
 import Graphics.KMS.Types
 import Graphics.KMS.Utils
@@ -9,8 +13,8 @@ import Graphics.KMS.Encoder
 import Graphics.KMS.Crtc
 
 main :: IO ()
-main = withDrm $ do
-  (conn,enc,crtc,mode) <- currentRes
+main = withDrm "/dev/dri/card0" $ \(Proxy :: Proxy drm) -> do
+  (conn,enc,crtc :: Crtc drm,mode) <- currentResources
   
   print $ conn { connectorModeInfo = []}
   lf >> print enc
@@ -20,8 +24,9 @@ main = withDrm $ do
   _ <- getLine
   return ()
 
-currentRes :: (?drm :: Drm) ⇒ IO (Connector,Encoder,Crtc,ModeInfo)
-currentRes = do
+currentResources :: (drm `Reifies` Drm) ⇒
+              IO (Connector drm,Encoder drm,Crtc drm,ModeInfo)
+currentResources = do
   conn ← (fmap (head . filter isConnected) . mapM getConnector . resConnectors)
     =<< getResources
   enc <- getEncoder $ connectorCurrentEncoder conn

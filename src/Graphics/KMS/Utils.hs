@@ -8,13 +8,15 @@ import Foreign
 import Control.Monad
 import Data.Maybe(fromMaybe)
 import Control.Exception(bracket)
+import Data.Reflection
+import Data.Proxy
 
-withDrm :: ((?drm :: Drm) ⇒ IO a) → IO a
-withDrm f = bracket
-            (openFd drm_device ReadWrite Nothing defaultFileFlags)
-            closeFd
-            (\drm -> let ?drm = Drm drm in f)
-  where drm_device = "/dev/dri/card0"
+withDrm :: FilePath →
+           (∀drm. (drm `Reifies` Drm) => Proxy drm -> IO a) → IO a
+withDrm drmPath f = bracket
+                    (openFd drmPath ReadWrite Nothing defaultFileFlags)
+                    closeFd
+                    (\drm -> reify (Drm drm) f)
 
 lPeekArray :: Storable b =>
               Ptr a -> (Ptr a -> IO Int) -> (Ptr a -> IO (Ptr b)) ->

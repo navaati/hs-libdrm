@@ -13,13 +13,13 @@ library
                    Graphics.KMS.ModeInfo, Graphics.KMS.Connector,
                    Graphics.KMS.Utils, Graphics.KMS.Encoder,
                    Graphics.KMS.Resources
-  build-depends: base, unix
-  extensions: UnicodeSyntax, ImplicitParams, ForeignFunctionInterface
+  build-depends: base, unix, tagged, reflection
+  extensions: UnicodeSyntax, FlexibleContexts, ScopedTypeVariables,
+              TypeOperators, ForeignFunctionInterface
   build-tools: hsc2hs
   include-dirs: /usr/include/libdrm, /usr/include/libkms
   extra-libraries: drm, kms
 
 executable main
   main-is: main.hs
-  build-depends: base, kms
-  extensions: UnicodeSyntax, ImplicitParams
+  build-depends: base, kms, tagged, reflection

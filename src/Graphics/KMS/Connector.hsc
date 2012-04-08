@@ -3,6 +3,8 @@ module Graphics.KMS.Connector where
 import Foreign
 import Foreign.C
 import System.Posix
+import Data.Reflection
+import Data.Proxy
 
 #include<stdint.h>
 #include<xf86drmMode.h>
@@ -11,22 +13,22 @@ import Graphics.KMS.Types
 import Graphics.KMS.ModeInfo
 import Graphics.KMS.Utils
 
-data Connector = Connector
-                  { connectorId :: ConnectorId
-                  , connectorCurrentEncoder :: EncoderId
-                  , connectorType :: ConnectorType
-                  , connectorTypeId :: Word32
-                  , connectorConnection :: Connection
-                  , mmSize :: (Word32,Word32)
-                  , connectorSubpixel :: SubPixel
-                  , connectorModeInfo :: [ModeInfo]
-                  , connectorProperties :: [Property]
-                  , connectorEncoders :: [EncoderId]
-                  } deriving (Show)
+data Connector drm = Connector
+                     { connectorId :: ConnectorId drm
+                     , connectorCurrentEncoder :: EncoderId drm
+                     , connectorType :: ConnectorType
+                     , connectorTypeId :: Word32
+                     , connectorConnection :: Connection
+                     , mmSize :: (Word32,Word32)
+                     , connectorSubpixel :: SubPixel
+                     , connectorModeInfo :: [ModeInfo]
+                     , connectorProperties :: [Property]
+                     , connectorEncoders :: [EncoderId drm]
+                     } deriving (Show)
 
 #define hsc_p(field) hsc_peek(drmModeConnector, field)
 
-peekConnector :: Ptr Connector -> IO Connector
+peekConnector :: ConnectorPtr drm -> IO (Connector drm)
 peekConnector ptr = do
   cId <- (#p connector_id) ptr
   currEncoder <- (#p encoder_id) ptr
@@ -43,9 +45,11 @@ peekConnector ptr = do
   return $ Connector cId currEncoder cType typeId connection
     (width,height) subpixel modes properties encoders
 
-getConnector :: (?drm :: Drm) ⇒ ConnectorId -> IO Connector
+getConnector :: ∀drm. (drm `Reifies` Drm) ⇒
+                ConnectorId drm -> IO (Connector drm)
 getConnector cId = do
-  ptr <- throwErrnoIfNull "drmModeGetConnector" (drmModeGetConnector ?drm cId)
+  ptr <- throwErrnoIfNull "drmModeGetConnector" $
+         drmModeGetConnector (reflect (Proxy :: Proxy drm)) cId
   connector <- peekConnector ptr
   drmModeFreeConnector ptr
   return connector
@@ -64,7 +68,7 @@ instance Storable Connection where
   peek = peekEnum connectionEnum
   poke = undefined
 
-isConnected :: Connector -> Bool
+isConnected :: Connector drm -> Bool
 isConnected = (== Connected) . connectorConnection
 
 data SubPixel = UnknownSubPixel | HorizontalRGB | HorizontalBGR | VerticalRGB | VerticalBGR | None deriving (Show, Eq)
@@ -112,7 +116,9 @@ instance Storable ConnectorType where
 
 type Property = ()
 
+type ConnectorPtr drm = Ptr (Connector drm)
+
 foreign import ccall "drmModeGetConnector"
-  drmModeGetConnector :: Drm -> ConnectorId -> IO (Ptr Connector)
+  drmModeGetConnector :: Drm -> ConnectorId drm -> IO (ConnectorPtr drm)
 foreign import ccall "drmModeFreeConnector"
-  drmModeFreeConnector :: Ptr Connector -> IO ()
+  drmModeFreeConnector :: ConnectorPtr drm -> IO ()

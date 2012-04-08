@@ -5,6 +5,8 @@ module Graphics.KMS.Resources (Resources(..), getResources) where
 import Foreign
 import Foreign.C
 import System.Posix
+import Data.Reflection
+import Data.Proxy
 
 #include<stdint.h>
 #include<xf86drmMode.h>
@@ -12,17 +14,17 @@ import System.Posix
 import Graphics.KMS.Types
 import Graphics.KMS.Utils
 
-data Resources = Resources
-                  { resFbs :: [FbId]
-                  , resCrtcs :: [CrtcId]
-                  , resConnectors :: [ConnectorId]
-                  , resEncoders :: [EncoderId]
-                  , resMinSize, resMaxSize :: (Word32, Word32)
-                  } deriving (Show)
+data Resources drm = Resources
+                     { resFbs :: [FbId drm]
+                     , resCrtcs :: [CrtcId drm]
+                     , resConnectors :: [ConnectorId drm]
+                     , resEncoders :: [EncoderId drm]
+                     , resMinSize, resMaxSize :: (Word32, Word32)
+                     } deriving (Show)
 
 #define hsc_p(field) hsc_peek(drmModeRes, field)
 
-peekResources :: Ptr Resources -> IO Resources
+peekResources :: ResourcesPtr drm -> IO (Resources drm)
 peekResources ptr = do
   fbs <- pa (#p count_fbs) (#p fbs)
   crtcs <- pa (#p count_crtcs) (#p crtcs)
@@ -38,14 +40,18 @@ peekResources ptr = do
     (min_width, min_height) (max_width, max_height)
   where pa = lPeekArray ptr
 
-getResources :: (?drm :: Drm) ⇒ IO Resources
+getResources :: ∀drm. (drm `Reifies` Drm) ⇒
+                IO (Resources drm)
 getResources = do
-  ptr <- throwErrnoIfNull "drmModeGetResources" (drmModeGetResources ?drm)
+  ptr <- throwErrnoIfNull "drmModeGetResources" $
+         drmModeGetResources (reflect (Proxy :: Proxy drm))
   res <- peekResources ptr
   drmModeFreeResources ptr
   return res
 
+type ResourcesPtr drm = Ptr (Resources drm)
+
 foreign import ccall "drmModeGetResources"
-  drmModeGetResources :: Drm -> IO (Ptr Resources)
+  drmModeGetResources :: Drm -> IO (ResourcesPtr drm)
 foreign import ccall "drmModeFreeResources"
-  drmModeFreeResources :: Ptr Resources -> IO ()
+  drmModeFreeResources :: ResourcesPtr drm -> IO ()
