@@ -12,7 +12,7 @@ import Data.Proxy
 #include<xf86drmMode.h>
 
 import Graphics.KMS.Types
-import Graphics.KMS.Utils
+import Graphics.KMS.Internals.Utils
 
 data Resources drm = Resources
                      { resFbs ∷ [FbId drm]

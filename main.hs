@@ -4,6 +4,7 @@ import Prelude.Unicode
 import Control.Monad.Unicode
 import Data.Reflection
 import Data.Proxy
+--import Data.Bits
 
 import Graphics.KMS.Types
 import Graphics.KMS.Utils
@@ -41,7 +42,10 @@ printMode mode = do
   putStr "Flags :\t"
   print . showBits $ modeFlags mode
   putStr "Type :\t"
-  print . showBits $ modeType mode-}
+  print . showBits $ modeType mode
+  where
+    showBits ∷ (Bits n, Bounded n) ⇒ n → String
+    showBits x = foldr (\b → (:) $ if testBit x b then '1' else '0' ) "" $ reverse [0..(bitSize x)-1]-}
 
 lf ∷ IO ()
 lf = putStrLn ""

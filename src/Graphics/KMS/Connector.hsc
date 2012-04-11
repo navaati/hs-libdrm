@@ -12,7 +12,7 @@ import Data.Proxy
 
 import Graphics.KMS.Types
 import Graphics.KMS.ModeInfo
-import Graphics.KMS.Utils
+import Graphics.KMS.Internals.Utils
 
 data Connector drm = Connector
                      { connectorId ∷ ConnectorId drm

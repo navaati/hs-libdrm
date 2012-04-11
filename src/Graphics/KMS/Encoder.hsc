@@ -11,7 +11,7 @@ import Data.Proxy
 #include<xf86drmMode.h>
 
 import Graphics.KMS.Types
-import Graphics.KMS.Utils
+import Graphics.KMS.Internals.Utils
 
 data Encoder drm = Encoder
                    { encoderId ∷ EncoderId drm
