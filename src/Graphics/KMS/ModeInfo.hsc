@@ -2,6 +2,7 @@ module Graphics.KMS.ModeInfo where
 
 import Foreign
 import Foreign.C.String
+import Graphics.KMS.Internals.Utils
 
 #include<stdint.h>
 #include<xf86drmMode.h>
@@ -18,6 +19,7 @@ data ModeInfo = ModeInfo
                 } deriving (Show)
 
 #define hsc_p(field) hsc_peek(drmModeModeInfo, field)
+#define hsc_f(field) hsc_ptr(drmModeModeInfo, field)
 
 instance Storable ModeInfo where
   sizeOf _ = #size drmModeModeInfo
@@ -31,12 +33,12 @@ instance Storable ModeInfo where
       , (#p hsync_end), (#p vsync_end)
       , (#p htotal), (#p vtotal)
       , (#p hskew), (#p vscan)]
-    [clock, vRefresh, flags, mType] ←
+    [clock, vRefresh] ←
       mapM ($ ptr) 
       [ (#p clock)
-      , (#p vrefresh)
-      , (#p flags)
-      , (#p type)]
+      , (#p vrefresh)]
+    flags ← peekFlags modeFlagEnum $ (#f flags) ptr
+    mType ← peekFlags typeFlagEnum $ (#f type) ptr
     name ← peekCAString $ (#ptr drmModeModeInfo, name) ptr
     return $ ModeInfo 
       clock
@@ -47,5 +49,35 @@ instance Storable ModeInfo where
       vRefresh flags mType name
   poke _ _ = return ()
 
-type ModeFlags = Word32
-type ModeType = Word32
+type ModeFlags = [ModeFlag]
+data ModeFlag = PHSync | NHSync | PVSync | NVSync | Interlace | DBLScan | CSync | PCSync | NCSync | HSkew | BCast | PixΜx | DBLClk | ClkDiv2 deriving (Show, Eq)
+
+modeFlagEnum ∷ [(ModeFlag,Word32)]
+modeFlagEnum = [
+  (PHSync,(#const DRM_MODE_FLAG_PHSYNC)),
+  (NHSync,(#const DRM_MODE_FLAG_NHSYNC)),
+  (PVSync,(#const DRM_MODE_FLAG_PVSYNC)),
+  (NVSync,(#const DRM_MODE_FLAG_NVSYNC)),
+  (Interlace,(#const DRM_MODE_FLAG_INTERLACE)),
+  (DBLScan,(#const DRM_MODE_FLAG_DBLSCAN)),
+  (CSync,(#const DRM_MODE_FLAG_CSYNC)),
+  (PCSync,(#const DRM_MODE_FLAG_PCSYNC)),
+  (NCSync,(#const DRM_MODE_FLAG_NCSYNC)),
+  (HSkew,(#const DRM_MODE_FLAG_HSKEW)),
+  (BCast,(#const DRM_MODE_FLAG_BCAST)),
+  (PixΜx,(#const DRM_MODE_FLAG_PIXMUX)),
+  (DBLClk,(#const DRM_MODE_FLAG_DBLCLK)),
+  (ClkDiv2,(#const DRM_MODE_FLAG_CLKDIV2))]
+
+type ModeType = [ModeTypeFlag]
+data ModeTypeFlag = Builtin | ClockC | CrtcC | Preferred | Default | UserDef | Driver deriving (Show, Eq)
+
+typeFlagEnum ∷ [(ModeTypeFlag,Word32)]
+typeFlagEnum = [
+  (Builtin,(#const DRM_MODE_TYPE_BUILTIN)),
+  (ClockC,(#const DRM_MODE_TYPE_CLOCK_C)),
+  (CrtcC,(#const DRM_MODE_TYPE_CRTC_C)),
+  (Preferred,(#const DRM_MODE_TYPE_PREFERRED)),
+  (Default,(#const DRM_MODE_TYPE_DEFAULT)),
+  (UserDef,(#const DRM_MODE_TYPE_USERDEF)),
+  (Driver,(#const DRM_MODE_TYPE_DRIVER))]
