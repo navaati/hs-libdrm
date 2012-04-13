@@ -1,38 +1,26 @@
-{-# LANGUAGE UnicodeSyntax, FlexibleContexts, ScopedTypeVariables, TypeOperators #-}
+{-# LANGUAGE UnicodeSyntax, FlexibleContexts, ScopedTypeVariables #-}
 
-import Prelude.Unicode
 import Control.Monad.Unicode
-import Data.Reflection
 import Data.Proxy
 
-import Graphics.KMS.Types
 import Graphics.KMS.Utils
 import Graphics.KMS.Resources
 import Graphics.KMS.Connector
-import Graphics.KMS.ModeInfo
-import Graphics.KMS.Encoder
-import Graphics.KMS.Crtc
 
 main ∷ IO ()
-main = withDrm "/dev/dri/card0" $ \(Proxy ∷ Proxy drm) → do
-  (conn,enc,crtc ∷ Crtc drm,mode) ← currentResources
-  
-  print $ conn { connectorModeInfo = []}
-  lf ≫ print enc
-  lf ≫ print crtc
-  lf ≫ print mode
+main = do
+  withDrm "/dev/dri/card0" $ \(Proxy ∷ Proxy drm) → do
+    putStrLn "Current ressources :"
+    (resIds ∷ Resources drm) ← getResources
+    lf ≫ print resIds
+    (connectedResources resIds ≫=) $ mapM_ $ \(conn,enc,crtc,_) → do
+      lf ≫ lf
+      print $ conn { connectorModeInfo = []}
+      lf ≫ print enc
+      lf ≫ print crtc
   
   _ ← getLine
   return ()
-
-currentResources ∷ (drm `Reifies` Drm) ⇒
-              IO (Connector drm,Encoder drm,Crtc drm,ModeInfo)
-currentResources = do
-  conn ← (fmap (head ∘ filter isConnected) ∘ mapM getConnector ∘ resConnectors)
-    =≪ getResources
-  enc ← getEncoder $ connectorCurrentEncoder conn
-  crtc ← getCrtc $ encoderCrtcId enc
-  return (conn,enc,crtc,crtcMode crtc)
 
 lf ∷ IO ()
 lf = putStrLn ""
