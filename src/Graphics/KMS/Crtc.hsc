@@ -27,7 +27,7 @@ data Crtc drm = ConnectedCrtc
                 , crtcPxSize ∷ (Word32,Word32)
                 , crtcGammaSize ∷ Int
                 } deriving (Show)
-              
+
 #define hsc_p(field) hsc_peek(drmModeCrtc, field)
 
 peekCrtc ∷ CrtcPtr drm → IO (Crtc drm)

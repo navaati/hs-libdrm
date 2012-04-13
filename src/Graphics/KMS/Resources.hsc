@@ -31,7 +31,7 @@ peekResources ptr = do
   connectors ← pa (#p count_connectors) (#p connectors)
   encoders ← pa (#p count_encoders) (#p encoders)
   [min_width, max_width, min_height, max_height] ←
-    mapM ($ ptr) 
+    mapM ($ ptr)
     [ (#p min_width)
     , (#p max_width)
     , (#p min_height)

@@ -34,13 +34,13 @@ instance Storable ModeInfo where
       , (#p htotal), (#p vtotal)
       , (#p hskew), (#p vscan)]
     [clock, vRefresh] ←
-      mapM ($ ptr) 
+      mapM ($ ptr)
       [ (#p clock)
       , (#p vrefresh)]
     flags ← peekFlags modeFlagEnum $ (#f flags) ptr
     mType ← peekFlags typeFlagEnum $ (#f type) ptr
     name ← peekCAString $ (#ptr drmModeModeInfo, name) ptr
-    return $ ModeInfo 
+    return $ ModeInfo
       clock
       (hDisplay, vDisplay)
       (hTotal, vTotal)
