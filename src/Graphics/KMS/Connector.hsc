@@ -1,5 +1,6 @@
 module Graphics.KMS.Connector where
 
+import Prelude.Unicode
 import Foreign
 import Foreign.C
 import System.Posix
@@ -14,66 +15,66 @@ import Graphics.KMS.ModeInfo
 import Graphics.KMS.Utils
 
 data Connector drm = Connector
-                     { connectorId :: ConnectorId drm
-                     , connectorCurrentEncoder :: EncoderId drm
-                     , connectorType :: ConnectorType
-                     , connectorTypeId :: Word32
-                     , connectorConnection :: Connection
-                     , mmSize :: (Word32,Word32)
-                     , connectorSubpixel :: SubPixel
-                     , connectorModeInfo :: [ModeInfo]
-                     , connectorProperties :: [Property]
-                     , connectorEncoders :: [EncoderId drm]
+                     { connectorId ∷ ConnectorId drm
+                     , connectorCurrentEncoder ∷ EncoderId drm
+                     , connectorType ∷ ConnectorType
+                     , connectorTypeId ∷ Word32
+                     , connectorConnection ∷ Connection
+                     , mmSize ∷ (Word32,Word32)
+                     , connectorSubpixel ∷ SubPixel
+                     , connectorModeInfo ∷ [ModeInfo]
+                     , connectorProperties ∷ [Property]
+                     , connectorEncoders ∷ [EncoderId drm]
                      } deriving (Show)
 
 #define hsc_p(field) hsc_peek(drmModeConnector, field)
 
-peekConnector :: ConnectorPtr drm -> IO (Connector drm)
+peekConnector ∷ ConnectorPtr drm → IO (Connector drm)
 peekConnector ptr = do
-  cId <- (#p connector_id) ptr
-  currEncoder <- (#p encoder_id) ptr
-  cType <- (#p connector_type) ptr
-  typeId <- (#p connector_type_id) ptr
-  connection <- (#p connection) ptr
-  width <- (#p mmWidth) ptr
-  height <- (#p mmHeight) ptr
-  subpixel <- (#p subpixel) ptr
-  modes <- lPeekArray ptr (#p count_modes) (#p modes)
-  propertiesCount <- (#p count_props) ptr
+  cId ← (#p connector_id) ptr
+  currEncoder ← (#p encoder_id) ptr
+  cType ← (#p connector_type) ptr
+  typeId ← (#p connector_type_id) ptr
+  connection ← (#p connection) ptr
+  width ← (#p mmWidth) ptr
+  height ← (#p mmHeight) ptr
+  subpixel ← (#p subpixel) ptr
+  modes ← lPeekArray ptr (#p count_modes) (#p modes)
+  propertiesCount ← (#p count_props) ptr
   let properties = replicate propertiesCount ()
-  encoders <- lPeekArray ptr (#p count_encoders) (#p encoders)
+  encoders ← lPeekArray ptr (#p count_encoders) (#p encoders)
   return $ Connector cId currEncoder cType typeId connection
     (width,height) subpixel modes properties encoders
 
-getConnector :: ∀drm. (drm `Reifies` Drm) ⇒
-                ConnectorId drm -> IO (Connector drm)
+getConnector ∷ ∀drm. (drm `Reifies` Drm) ⇒
+                ConnectorId drm → IO (Connector drm)
 getConnector cId = do
-  ptr <- throwErrnoIfNull "drmModeGetConnector" $
-         drmModeGetConnector (reflect (Proxy :: Proxy drm)) cId
-  connector <- peekConnector ptr
+  ptr ← throwErrnoIfNull "drmModeGetConnector" $
+         drmModeGetConnector (reflect (Proxy ∷ Proxy drm)) cId
+  connector ← peekConnector ptr
   drmModeFreeConnector ptr
   return connector
 
 data Connection = Connected | Disconnected | UnknownConnection deriving (Show, Eq)
 
-connectionEnum :: [(CInt,Connection)]
+connectionEnum ∷ [(CInt,Connection)]
 connectionEnum = [
   ((#const DRM_MODE_CONNECTED), Connected) ,
   ((#const DRM_MODE_DISCONNECTED), Disconnected) ,
   ((#const DRM_MODE_UNKNOWNCONNECTION), UnknownConnection) ]
 
 instance Storable Connection where
-  sizeOf _ = sizeOf (undefined :: CInt)
-  alignment _ = alignment (undefined :: CInt)
+  sizeOf _ = sizeOf (undefined ∷ CInt)
+  alignment _ = alignment (undefined ∷ CInt)
   peek = peekEnum connectionEnum
   poke = undefined
 
-isConnected :: Connector drm -> Bool
-isConnected = (== Connected) . connectorConnection
+isConnected ∷ Connector drm → Bool
+isConnected = (≡ Connected)∘connectorConnection
 
 data SubPixel = UnknownSubPixel | HorizontalRGB | HorizontalBGR | VerticalRGB | VerticalBGR | None deriving (Show, Eq)
 
-subpixelEnum :: [(CInt,SubPixel)]
+subpixelEnum ∷ [(CInt,SubPixel)]
 subpixelEnum = [
   ((#const DRM_MODE_SUBPIXEL_UNKNOWN), UnknownSubPixel) ,
   ((#const DRM_MODE_SUBPIXEL_HORIZONTAL_RGB), HorizontalRGB) ,
@@ -83,14 +84,14 @@ subpixelEnum = [
   ((#const DRM_MODE_SUBPIXEL_NONE), None) ]
 
 instance Storable SubPixel where
-  sizeOf _ = sizeOf (undefined :: CInt)
-  alignment _ = alignment (undefined :: CInt)
+  sizeOf _ = sizeOf (undefined ∷ CInt)
+  alignment _ = alignment (undefined ∷ CInt)
   peek = peekEnum subpixelEnum
   poke = undefined
 
 data ConnectorType = UnknownConnectorType | VGA | DVII | DVID | DVIA | Composite | SVIDEO | LVDS | Component | NinePinDIN | DisplayPort | HDMIA | HDMIB | TV | EDP deriving (Show, Eq)
 
-connectorTypeEnum :: [(Word32,ConnectorType)]
+connectorTypeEnum ∷ [(Word32,ConnectorType)]
 connectorTypeEnum = [
   ((#const DRM_MODE_CONNECTOR_Unknown), UnknownConnectorType) ,
   ((#const DRM_MODE_CONNECTOR_VGA), VGA) ,
@@ -109,8 +110,8 @@ connectorTypeEnum = [
   ((#const DRM_MODE_CONNECTOR_eDP), EDP) ]
 
 instance Storable ConnectorType where
-  sizeOf _ = sizeOf (undefined :: Word32)
-  alignment _ = alignment (undefined :: Word32)
+  sizeOf _ = sizeOf (undefined ∷ Word32)
+  alignment _ = alignment (undefined ∷ Word32)
   peek = peekEnum connectorTypeEnum
   poke = undefined
 
@@ -119,6 +120,6 @@ type Property = ()
 type ConnectorPtr drm = Ptr (Connector drm)
 
 foreign import ccall "drmModeGetConnector"
-  drmModeGetConnector :: Drm -> ConnectorId drm -> IO (ConnectorPtr drm)
+  drmModeGetConnector ∷ Drm → ConnectorId drm → IO (ConnectorPtr drm)
 foreign import ccall "drmModeFreeConnector"
-  drmModeFreeConnector :: ConnectorPtr drm -> IO ()
+  drmModeFreeConnector ∷ ConnectorPtr drm → IO ()

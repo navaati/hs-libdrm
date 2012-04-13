@@ -13,7 +13,8 @@ library
                    Graphics.KMS.ModeInfo, Graphics.KMS.Connector,
                    Graphics.KMS.Utils, Graphics.KMS.Encoder,
                    Graphics.KMS.Resources
-  build-depends: base, unix, tagged, reflection
+  build-depends: base, base-unicode-symbols, unix,
+                 tagged, reflection
   extensions: UnicodeSyntax, FlexibleContexts, ScopedTypeVariables,
               TypeOperators, ForeignFunctionInterface
   ghc-options: -Wall
