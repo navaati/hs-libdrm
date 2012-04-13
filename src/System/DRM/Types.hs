@@ -1,6 +1,6 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 
-module Graphics.KMS.Types where
+module System.DRM.Types where
 
 import Foreign
 import System.Posix

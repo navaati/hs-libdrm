@@ -9,11 +9,11 @@ cabal-version: >=1.8
 
 library
   hs-source-dirs: src
-  exposed-modules: Graphics.KMS.Types, Graphics.KMS.Crtc,
-                   Graphics.KMS.ModeInfo, Graphics.KMS.Connector,
-                   Graphics.KMS.Utils, Graphics.KMS.Encoder,
-                   Graphics.KMS.Resources
-  other-modules: Graphics.KMS.Internals.Utils
+  exposed-modules: System.DRM, System.DRM.Types, System.DRM.KMS.Crtc,
+                   System.DRM.KMS.ModeInfo, System.DRM.KMS.Connector,
+                   System.DRM.KMS.Utils, System.DRM.KMS.Encoder,
+                   System.DRM.KMS.Resources
+  other-modules: System.DRM.FFIUtils
   build-depends: base, base-unicode-symbols, unix,
                  tagged, reflection
   extensions: UnicodeSyntax, FlexibleContexts, ScopedTypeVariables,

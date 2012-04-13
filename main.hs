@@ -3,9 +3,10 @@
 import Control.Monad.Unicode
 import Data.Proxy
 
-import Graphics.KMS.Utils
-import Graphics.KMS.Resources
-import Graphics.KMS.Connector
+import System.DRM
+import System.DRM.KMS.Utils
+import System.DRM.KMS.Resources
+import System.DRM.KMS.Connector
 
 main ∷ IO ()
 main = do

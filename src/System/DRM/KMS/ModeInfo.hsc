@@ -1,8 +1,8 @@
-module Graphics.KMS.ModeInfo where
+module System.DRM.KMS.ModeInfo where
 
 import Foreign
 import Foreign.C.String
-import Graphics.KMS.Internals.Utils
+import System.DRM.FFIUtils
 
 #include<stdint.h>
 #include<xf86drmMode.h>

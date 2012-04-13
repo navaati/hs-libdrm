@@ -1,4 +1,4 @@
-module Graphics.KMS.Crtc where
+module System.DRM.KMS.Crtc where
 
 import Prelude.Unicode
 import Foreign
@@ -10,8 +10,8 @@ import Data.Proxy
 #include<stdint.h>
 #include<xf86drmMode.h>
 
-import Graphics.KMS.ModeInfo
-import Graphics.KMS.Types
+import System.DRM.KMS.ModeInfo
+import System.DRM.Types
 
 data Crtc drm = ConnectedCrtc
                 { crtcId ∷ CrtcId drm

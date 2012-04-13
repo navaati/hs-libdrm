@@ -1,6 +1,6 @@
 {-# LANGUAGE NoMonomorphismRestriction #-}
 
-module Graphics.KMS.Resources (Resources(..), getResources) where
+module System.DRM.KMS.Resources (Resources(..), getResources) where
 
 import Foreign
 import Foreign.C
@@ -11,8 +11,8 @@ import Data.Proxy
 #include<stdint.h>
 #include<xf86drmMode.h>
 
-import Graphics.KMS.Types
-import Graphics.KMS.Internals.Utils
+import System.DRM.Types
+import System.DRM.FFIUtils
 
 data Resources drm = Resources
                      { resFbs ∷ [FbId drm]

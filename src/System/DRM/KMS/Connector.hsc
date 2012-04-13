@@ -1,4 +1,4 @@
-module Graphics.KMS.Connector where
+module System.DRM.KMS.Connector where
 
 import Prelude.Unicode
 import Foreign
@@ -10,9 +10,9 @@ import Data.Proxy
 #include<stdint.h>
 #include<xf86drmMode.h>
 
-import Graphics.KMS.Types
-import Graphics.KMS.ModeInfo
-import Graphics.KMS.Internals.Utils
+import System.DRM.Types
+import System.DRM.KMS.ModeInfo
+import System.DRM.FFIUtils
 
 data Connector drm = Connector
                      { connectorId ∷ ConnectorId drm

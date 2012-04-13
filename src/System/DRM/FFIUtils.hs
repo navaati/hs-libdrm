@@ -1,4 +1,4 @@
-module Graphics.KMS.Internals.Utils where
+module System.DRM.FFIUtils where
 
 import Prelude.Unicode
 import Foreign

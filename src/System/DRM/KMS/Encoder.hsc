@@ -1,4 +1,4 @@
-module Graphics.KMS.Encoder where
+module System.DRM.KMS.Encoder where
 
 import Foreign
 import Foreign.C
@@ -10,8 +10,8 @@ import Data.Proxy
 #include<stdint.h>
 #include<xf86drmMode.h>
 
-import Graphics.KMS.Types
-import Graphics.KMS.Internals.Utils
+import System.DRM.Types
+import System.DRM.FFIUtils
 
 data Encoder drm = Encoder
                    { encoderId ∷ EncoderId drm
