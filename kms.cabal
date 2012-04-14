@@ -20,5 +20,4 @@ library
               TypeOperators, ForeignFunctionInterface
   ghc-options: -Wall
   build-tools: hsc2hs
-  include-dirs: /usr/include/libdrm, /usr/include/libkms
-  extra-libraries: drm, kms
+  pkgconfig-depends: libdrm
