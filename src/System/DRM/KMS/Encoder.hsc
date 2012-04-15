@@ -5,7 +5,6 @@ import Foreign.C
 import System.Posix
 import Control.Monad (liftM5)
 import Data.Reflection
-import Data.Proxy
 
 #include<stdint.h>
 #include<xf86drmMode.h>
@@ -31,11 +30,11 @@ peekEncoder ptr = liftM5 Encoder
   ((#p possible_crtcs) ptr)
   ((#p possible_clones) ptr)
 
-getEncoder ∷ ∀drm. (drm `Reifies` Drm) ⇒
+getEncoder ∷ (drm `Reifies` Drm) ⇒
               EncoderId drm → IO (Encoder drm)
 getEncoder eId = do
   ptr ← throwErrnoIfNull "drmModeGetEncoder" $
-         drmModeGetEncoder (reflect (Proxy ∷ Proxy drm)) eId
+         applyDrm drmModeGetEncoder eId
   encoder ← peekEncoder ptr
   drmModeFreeEncoder ptr
   return encoder

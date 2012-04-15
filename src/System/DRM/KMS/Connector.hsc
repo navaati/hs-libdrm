@@ -5,7 +5,6 @@ import Foreign
 import Foreign.C
 import System.Posix
 import Data.Reflection
-import Data.Proxy
 
 #include<stdint.h>
 #include<xf86drmMode.h>
@@ -46,11 +45,11 @@ peekConnector ptr = do
   return $ Connector cId currEncoder cType typeId connection
     (width,height) subpixel modes properties encoders
 
-getConnector ∷ ∀drm. (drm `Reifies` Drm) ⇒
+getConnector ∷ (drm `Reifies` Drm) ⇒
                 ConnectorId drm → IO (Connector drm)
 getConnector cId = do
   ptr ← throwErrnoIfNull "drmModeGetConnector" $
-         drmModeGetConnector (reflect (Proxy ∷ Proxy drm)) cId
+         applyDrm drmModeGetConnector cId
   connector ← peekConnector ptr
   drmModeFreeConnector ptr
   return connector

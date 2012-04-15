@@ -1,6 +1,6 @@
 {-# LANGUAGE Rank2Types #-}
 
-module System.DRM where
+module System.DRM (withDrm, module System.DRM.Types) where
 
 import System.Posix
 import Control.Exception(bracket)

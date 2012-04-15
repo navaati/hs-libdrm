@@ -1,7 +1,6 @@
-{-# LANGUAGE UnicodeSyntax, FlexibleContexts, ScopedTypeVariables #-}
+{-# LANGUAGE UnicodeSyntax, FlexibleContexts #-}
 
 import Control.Monad.Unicode
-import Data.Proxy
 
 import System.DRM
 import System.DRM.KMS.Utils
@@ -10,10 +9,10 @@ import System.DRM.KMS.Connector
 
 main ∷ IO ()
 main = do
-  withDrm "/dev/dri/card0" $ \(Proxy ∷ Proxy drm) → do
+  withDrm "/dev/dri/card0" $ \p → do
     putStrLn "Current ressources :"
-    (resIds ∷ Resources drm) ← getResources
-    lf ≫ print resIds
+    resIds ← getResources
+    lf ≫ print (resIds `withSameTagAs` p)
     (connectedResources resIds ≫=) $ mapM_ $ \(conn,enc,crtc,_) → do
       lf ≫ lf
       print $ conn { connectorModeInfo = []}

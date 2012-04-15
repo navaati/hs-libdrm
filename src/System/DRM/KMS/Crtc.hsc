@@ -5,7 +5,6 @@ import Foreign
 import Foreign.C
 import System.Posix
 import Data.Reflection
-import Data.Proxy
 
 #include<stdint.h>
 #include<xf86drmMode.h>
@@ -47,11 +46,11 @@ peekCrtc ptr = do
     mode ← (#p mode) ptr
     return $ ConnectedCrtc cId (FbId fbId) (x,y) (w,h) mode gammaSize
 
-getCrtc ∷ ∀drm. (drm `Reifies` Drm) ⇒
+getCrtc ∷ (drm `Reifies` Drm) ⇒
            CrtcId drm → IO (Crtc drm)
 getCrtc cId = do
   ptr ← throwErrnoIfNull "drmModeGetCrtc" $
-         drmModeGetCrtc (reflect (Proxy ∷ Proxy drm)) cId
+         applyDrm drmModeGetCrtc cId
   crtc ← peekCrtc ptr
   drmModeFreeCrtc ptr
   return crtc
