@@ -16,8 +16,7 @@ library
   other-modules: System.DRM.FFIUtils
   build-depends: base, base-unicode-symbols, unix,
                  tagged, reflection
-  extensions: UnicodeSyntax, FlexibleContexts, ScopedTypeVariables,
-              ConstraintKinds, ForeignFunctionInterface
+  extensions: UnicodeSyntax, FlexibleContexts, ConstraintKinds
   ghc-options: -Wall
   build-tools: hsc2hs
   pkgconfig-depends: libdrm

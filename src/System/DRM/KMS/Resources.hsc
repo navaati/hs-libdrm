@@ -1,4 +1,4 @@
-{-# LANGUAGE NoMonomorphismRestriction #-}
+{-# LANGUAGE NoMonomorphismRestriction, ScopedTypeVariables, ForeignFunctionInterface #-}
 
 module System.DRM.KMS.Resources (Resources(..), getResources) where
 

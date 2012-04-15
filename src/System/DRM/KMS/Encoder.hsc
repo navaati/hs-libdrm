@@ -1,3 +1,5 @@
+{-# LANGUAGE ForeignFunctionInterface #-}
+
 module System.DRM.KMS.Encoder where
 
 import Foreign

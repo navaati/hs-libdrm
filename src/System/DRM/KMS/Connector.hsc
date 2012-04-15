@@ -1,3 +1,5 @@
+{-# LANGUAGE ForeignFunctionInterface #-}
+
 module System.DRM.KMS.Connector where
 
 import Prelude.Unicode

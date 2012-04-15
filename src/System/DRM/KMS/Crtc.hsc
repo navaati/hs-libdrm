@@ -1,3 +1,5 @@
+{-# LANGUAGE ForeignFunctionInterface #-}
+
 module System.DRM.KMS.Crtc where
 
 import Prelude.Unicode
