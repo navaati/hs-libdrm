@@ -30,4 +30,8 @@ clean:
 cleanall:clean
 	cabal clean
 
-.PHONY:default all launch ghci clean cleanall
+edit:
+	@find src -type f -exec emacsclient -n {} +
+	@emacsclient -n main.hs
+
+.PHONY:default all launch ghci clean cleanall edit
