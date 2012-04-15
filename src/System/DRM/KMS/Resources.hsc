@@ -40,7 +40,7 @@ peekResources ptr = do
     (min_width, min_height) (max_width, max_height)
   where pa = lPeekArray ptr
 
-getResources ∷ ∀drm. (drm `Reifies` Drm) ⇒
+getResources ∷ ∀drm. (RDrm drm) ⇒
                 IO (Resources drm)
 getResources = do
   ptr ← throwErrnoIfNull "drmModeGetResources" $

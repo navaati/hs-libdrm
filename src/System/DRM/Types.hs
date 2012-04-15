@@ -8,6 +8,7 @@ import Data.Proxy
 import Data.Reflection
 
 newtype Drm = Drm Fd
+type RDrm drm = (Reifies drm Drm)
 newtype FbId drm = FbId Word32 deriving (Show, Storable, Eq)
 newtype CrtcId drm = CrtcId Word32 deriving (Show, Storable, Eq)
 newtype ConnectorId drm = ConnectorId Word32 deriving (Show, Storable, Eq)
@@ -19,6 +20,6 @@ withSameTagAs = const
 sameTagProxy ∷ a t -> Proxy t
 sameTagProxy = withSameTagAs Proxy
 
-applyDrm ∷ Reifies drm Drm ⇒
+applyDrm ∷ RDrm drm ⇒
   (Drm → i drm → r) → i drm → r
 applyDrm f i = f (reflect $ sameTagProxy i) i

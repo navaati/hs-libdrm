@@ -17,7 +17,7 @@ library
   build-depends: base, base-unicode-symbols, unix,
                  tagged, reflection
   extensions: UnicodeSyntax, FlexibleContexts, ScopedTypeVariables,
-              TypeOperators, ForeignFunctionInterface
+              ConstraintKinds, ForeignFunctionInterface
   ghc-options: -Wall
   build-tools: hsc2hs
   pkgconfig-depends: libdrm

@@ -1,6 +1,5 @@
 module System.DRM.KMS.Utils where
 
-import Data.Reflection
 import Control.Monad.Unicode
 import Control.Applicative((<$>))
 
@@ -11,7 +10,7 @@ import System.DRM.KMS.Encoder
 import System.DRM.KMS.Crtc
 import System.DRM.KMS.ModeInfo
 
-connectedResources ∷ (drm `Reifies` Drm) ⇒
+connectedResources ∷ (RDrm drm) ⇒
   Resources drm →
   IO [(Connector drm,Encoder drm,Crtc drm,ModeInfo)]
 connectedResources res = do
