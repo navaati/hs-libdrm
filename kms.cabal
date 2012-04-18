@@ -21,6 +21,7 @@ library
                  ,System.DRM.C.KMS.ModeInfo
                  ,System.DRM.C.KMS.Crtc
                  ,System.DRM.C.KMS.Encoder
+                 ,System.DRM.C.KMS.Connector
   build-depends: base
                  ,base-unicode-symbols
                  ,unix
