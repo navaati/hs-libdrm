@@ -23,6 +23,7 @@ library
                  ,unix
                  ,tagged
                  ,reflection
+                 ,bindings-DSL
   extensions: UnicodeSyntax
               ,FlexibleContexts
               ,ConstraintKinds
