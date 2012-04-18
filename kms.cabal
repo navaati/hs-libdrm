@@ -19,6 +19,7 @@ library
                    ,System.DRM.KMS.Resources
   other-modules: System.DRM.FFIUtils
                  ,System.DRM.C.KMS.ModeInfo
+                 ,System.DRM.C.KMS.Crtc
   build-depends: base
                  ,base-unicode-symbols
                  ,unix
