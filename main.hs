@@ -1,4 +1,5 @@
-{-# LANGUAGE UnicodeSyntax, FlexibleContexts #-}
+{-# LANGUAGE UnicodeSyntax #-}
+{-# LANGUAGE FlexibleContexts #-}
 
 import Control.Monad.Unicode
 

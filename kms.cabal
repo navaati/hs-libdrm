@@ -9,14 +9,23 @@ cabal-version: >=1.8
 
 library
   hs-source-dirs: src
-  exposed-modules: System.DRM, System.DRM.Types, System.DRM.KMS.Crtc,
-                   System.DRM.KMS.ModeInfo, System.DRM.KMS.Connector,
-                   System.DRM.KMS.Utils, System.DRM.KMS.Encoder,
-                   System.DRM.KMS.Resources
+  exposed-modules: System.DRM
+                   ,System.DRM.Types
+                   ,System.DRM.KMS.Crtc
+                   ,System.DRM.KMS.ModeInfo
+                   ,System.DRM.KMS.Connector
+                   ,System.DRM.KMS.Utils
+                   ,System.DRM.KMS.Encoder
+                   ,System.DRM.KMS.Resources
   other-modules: System.DRM.FFIUtils
-  build-depends: base, base-unicode-symbols, unix,
-                 tagged, reflection
-  extensions: UnicodeSyntax, FlexibleContexts, ConstraintKinds
+  build-depends: base
+                 ,base-unicode-symbols
+                 ,unix
+                 ,tagged
+                 ,reflection
+  extensions: UnicodeSyntax
+              ,FlexibleContexts
+              ,ConstraintKinds
   ghc-options: -Wall
   build-tools: hsc2hs
   pkgconfig-depends: libdrm
