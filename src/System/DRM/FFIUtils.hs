@@ -16,9 +16,7 @@ peekEnum table ptr = do
   cint ← peek $ castPtr ptr
   return $ fromJust $ lookup cint table
 
-peekFlags ∷ (Bits f, Storable f, Eq e) ⇒ [(e,f)] → Ptr f → IO [e]
-peekFlags table ptr = do
-  cword ← peek ptr
-  let eToF = fromJust ∘ flip lookup table
-      isFlagSet f = (f .&. cword) ≡ f
-  return $ filter (isFlagSet ∘ eToF) $ map fst table
+cToFlags ∷ (Bits f, Eq e) ⇒ [(e,f)] → f → [e]
+cToFlags table cword = filter (isFlagSet ∘ eToF) $ map fst table
+  where eToF = fromJust ∘ flip lookup table
+        isFlagSet f = (f .&. cword) ≡ f

@@ -12,6 +12,7 @@ import System.Posix
 
 import System.DRM.Types
 import System.DRM.KMS.ModeInfo
+import System.DRM.C.KMS.ModeInfo
 import System.DRM.FFIUtils
 
 data Connector drm = Connector
@@ -39,7 +40,7 @@ peekConnector ptr = do
   width ← (#p mmWidth) ptr
   height ← (#p mmHeight) ptr
   subpixel ← (#p subpixel) ptr
-  modes ← lPeekArray ptr (#p count_modes) (#p modes)
+  modes ← fmap (fmap cToModeInfo) $ lPeekArray ptr (#p count_modes) (#p modes)
   propertiesCount ← (#p count_props) ptr
   let properties = replicate propertiesCount ()
   encoders ← lPeekArray ptr (#p count_encoders) (#p encoders)

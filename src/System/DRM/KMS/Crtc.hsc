@@ -11,6 +11,7 @@ import System.Posix
 #include<xf86drmMode.h>
 
 import System.DRM.KMS.ModeInfo
+import System.DRM.C.KMS.ModeInfo
 import System.DRM.Types
 
 data Crtc drm = ConnectedCrtc
@@ -44,7 +45,7 @@ peekCrtc ptr = do
     else do
     modeValid ← fmap toBool ((#p mode_valid) ptr ∷ IO CInt)
     if modeValid then return () else error "Connected CRTC mode not valid"
-    mode ← (#p mode) ptr
+    mode ← fmap cToModeInfo $ (#p mode) ptr
     return $ ConnectedCrtc cId (FbId fbId) (x,y) (w,h) mode gammaSize
 
 getCrtc ∷ (RDrm drm) ⇒

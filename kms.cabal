@@ -18,6 +18,7 @@ library
                    ,System.DRM.KMS.Encoder
                    ,System.DRM.KMS.Resources
   other-modules: System.DRM.FFIUtils
+                 ,System.DRM.C.KMS.ModeInfo
   build-depends: base
                  ,base-unicode-symbols
                  ,unix
