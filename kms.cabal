@@ -26,6 +26,7 @@ library
                  ,System.DRM.C.KMS.Encoder
                  ,System.DRM.C.KMS.Connector
                  ,System.DRM.C.KMS.Resources
+                 ,System.DRM.C.FrameBuffer
   build-depends: base
                  ,base-unicode-symbols
                  ,unix
