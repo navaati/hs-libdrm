@@ -19,6 +19,7 @@ library
                    ,System.DRM.KMS.Resources
                    ,System.DRM.BufferObject
                    ,System.DRM.BufferObject.Dumb
+                   ,System.DRM.FrameBuffer
   other-modules: System.DRM.FFIUtils
   build-depends: base
                  ,base-unicode-symbols
