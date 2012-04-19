@@ -18,7 +18,7 @@ data Resources drm = Resources
                      , resCrtcs ∷ [CrtcId drm]
                      , resConnectors ∷ [ConnectorId drm]
                      , resEncoders ∷ [EncoderId drm]
-                     , resMinSize, resMaxSize ∷ (Word32, Word32)
+                     , resMinSize, resMaxSize ∷ (Width, Height)
                      } deriving (Show)
 
 cToResources ∷ C'drmModeRes → IO (Resources drm)

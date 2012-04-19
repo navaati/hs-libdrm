@@ -17,6 +17,9 @@ library
                    ,System.DRM.KMS.Utils
                    ,System.DRM.KMS.Encoder
                    ,System.DRM.KMS.Resources
+                   ,System.DRM.BufferObject
+                   ,System.DRM.BufferObject.Dumb
+                   ,System.DRM.FrameBuffer
   other-modules: System.DRM.FFIUtils
                  ,System.DRM.C.KMS.ModeInfo
                  ,System.DRM.C.KMS.Crtc

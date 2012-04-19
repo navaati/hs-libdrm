@@ -19,7 +19,7 @@ data Connector drm = Connector
                      , connectorType ∷ ConnectorType
                      , connectorTypeId ∷ Word32
                      , connectorConnection ∷ Connection
-                     , mmSize ∷ (Word32,Word32)
+                     , mmSize ∷ (Width,Height)
                      , connectorSubpixel ∷ SubPixel
                      , connectorModeInfo ∷ [ModeInfo]
                      , connectorProperties ∷ [Property]
