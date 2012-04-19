@@ -17,6 +17,7 @@ library
                    ,System.DRM.KMS.Utils
                    ,System.DRM.KMS.Encoder
                    ,System.DRM.KMS.Resources
+                   ,System.DRM.BufferObject
   other-modules: System.DRM.FFIUtils
   build-depends: base
                  ,base-unicode-symbols
