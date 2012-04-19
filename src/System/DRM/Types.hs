@@ -14,6 +14,9 @@ newtype CrtcId drm = CrtcId Word32 deriving (Show, Storable, Eq)
 newtype ConnectorId drm = ConnectorId Word32 deriving (Show, Storable, Eq)
 newtype EncoderId drm = EncoderId Word32 deriving (Show, Storable, Eq)
 
+type Width = Word32
+type Height = Word32
+
 withSameTagAs ∷ a t -> b t -> a t
 withSameTagAs = const
 

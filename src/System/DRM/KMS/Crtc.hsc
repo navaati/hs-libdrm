@@ -17,14 +17,14 @@ data Crtc drm = ConnectedCrtc
                 { crtcId ∷ CrtcId drm
                 , crtcFbId ∷ FbId drm
                 , crtcPosition ∷ (Word32,Word32)
-                , crtcPxSize ∷ (Word32,Word32)
+                , crtcPxSize ∷ (Width,Height)
                 , crtcMode ∷ ModeInfo
                 , crtcGammaSize ∷ Int
                 } |
                 DisconnectedCrtc
                 { crtcId ∷ CrtcId drm
                 , crtcPosition ∷ (Word32,Word32)
-                , crtcPxSize ∷ (Word32,Word32)
+                , crtcPxSize ∷ (Width,Height)
                 , crtcGammaSize ∷ Int
                 } deriving (Show)
 
