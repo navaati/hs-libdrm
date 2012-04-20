@@ -1,9 +1,10 @@
 {-# LANGUAGE RecordWildCards #-}
 
-module System.DRM.KMS.Crtc (Crtc(..),getCrtc) where
+module System.DRM.KMS.Crtc (Crtc(..),getCrtc,setCrtc) where
 
 import Foreign
 import Foreign.C.Error
+import Data.List(genericLength)
 
 import System.DRM.C.KMS.Crtc
 import System.DRM.KMS.ModeInfo
@@ -52,3 +53,11 @@ getCrtc cId = do
   crtc ← fmap cToCrtc $ peek ptr
   c'drmModeFreeCrtc ptr
   return crtc
+
+setCrtc ∷ (RDrm drm) ⇒
+  CrtcId drm → FbId drm → (Word32,Word32) → [ConnectorId drm] → ModeInfo → IO ()
+setCrtc cId fId (x,y) connectors mode =
+  throwErrnoIfMinus1_ "drmModeAddFB" $
+  withArray connectors $ \connA → with (modeInfoToC mode) $ \modeP → do
+    applyDrm c'drmModeSetCrtc cId fId x y
+      connA (genericLength connectors) modeP

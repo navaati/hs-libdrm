@@ -10,7 +10,7 @@
 module System.DRM.C.KMS.ModeInfo (C'drmModeModeInfo,cToModeInfo,modeInfoToC) where
 #strict_import
 import Prelude.Unicode
-import Foreign.C.String(castCCharToChar)
+import Foreign.C.String(castCCharToChar,castCharToCChar)
 import System.DRM.FFIUtils
 
 import System.DRM.KMS.ModeInfo
@@ -71,8 +71,23 @@ cToModeInfo (C'drmModeModeInfo {..}) =
   (map castCCharToChar $ takeWhile (≢ 0) c'drmModeModeInfo'name)
 
 modeInfoToC ∷ ModeInfo → C'drmModeModeInfo
---modeInfoToC (ModeInfo{..}) = 
-modeInfoToC = error "TODO : modeInfoToC"
+modeInfoToC
+  (ModeInfo
+   c'drmModeModeInfo'clock
+   (c'drmModeModeInfo'hdisplay,c'drmModeModeInfo'vdisplay)
+   (c'drmModeModeInfo'htotal,c'drmModeModeInfo'vtotal)
+   ((c'drmModeModeInfo'hsync_start, c'drmModeModeInfo'vsync_start),
+    (c'drmModeModeInfo'hsync_end, c'drmModeModeInfo'vsync_end))
+   c'drmModeModeInfo'hskew c'drmModeModeInfo'vscan
+   c'drmModeModeInfo'vrefresh
+   flags
+   types
+   name)
+  = let c'drmModeModeInfo'flags = flagsToC modeFlagEnum flags
+        c'drmModeModeInfo'type = flagsToC typeFlagEnum types
+        c'drmModeModeInfo'name = (map castCharToCChar name) ⧺ [0]
+    in C'drmModeModeInfo{..}
+
 
 modeFlagEnum ∷ [(ModeFlag,Word32)]
 modeFlagEnum = [
