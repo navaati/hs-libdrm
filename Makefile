@@ -9,7 +9,7 @@ default:$(main)
 all:$(main) launch
 
 launch:$(main)
-	sudo openvt -ws -- ./$<
+	sudo openvt -ws -- sh -c './$< ; read -n1 -r'
 
 $(main):main.hs $(packagefile)
 	mkdir -p $(maindir)

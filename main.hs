@@ -13,26 +13,22 @@ import System.DRM.BufferObject.Dumb
 import System.DRM.FrameBuffer
 
 main ∷ IO ()
-main = do
-  withDrm "/dev/dri/card0" $ \p → do
-    (conn,_,crtc,mode):_ ← connectedResources =≪ getResources
-    putStrLn "FBCon :"
-    print (crtc `withSameTagAs` p)
-    print =≪ getFb (crtcFbId crtc)
-    let (w,h) = modeDisplay mode
-    lf
-    putStrLn "My buffer :"
-    myBO ← let fI = fromIntegral in createDumbBO (fI w) (fI h)
-    print (myBO `withSameTagAs` p)
-    myFb ← getFb =≪ addFb myBO
-    print myFb
-    setCrtc (crtcId crtc) (fbId myFb) (0,0) [(connectorId conn)] mode
-    pause
-    setCrtc (crtcId crtc) (crtcFbId crtc) (crtcPosition crtc) [(connectorId conn)] mode
-    boDestroy myBO
-  
+main = withDrm "/dev/dri/card0" $ \p → do
+  (conn,_,crtc,mode):_ ← connectedResources =≪ getResources
+  putStrLn "FBCon :"
+  print (crtc `withSameTagAs` p)
+  print =≪ getFb (crtcFbId crtc)
+  let (w,h) = modeDisplay mode
+  lf
+  putStrLn "My buffer :"
+  myBO ← let fI = fromIntegral in createDumbBO (fI w) (fI h)
+  print (myBO `withSameTagAs` p)
+  myFb ← getFb =≪ addFb myBO
+  print myFb
+  setCrtc (crtcId crtc) (fbId myFb) (0,0) [(connectorId conn)] mode
   pause
-  return ()
+  setCrtc (crtcId crtc) (crtcFbId crtc) (crtcPosition crtc) [(connectorId conn)] mode
+  boDestroy myBO
 
 lf ∷ IO ()
 lf = putStrLn ""
