@@ -87,7 +87,7 @@ modeFlagEnum = [
   (NCSync,c'DRM_MODE_FLAG_NCSYNC),
   (HSkew,c'DRM_MODE_FLAG_HSKEW),
   (BCast,c'DRM_MODE_FLAG_BCAST),
-  (PixΜx,c'DRM_MODE_FLAG_PIXMUX),
+  (PixMux,c'DRM_MODE_FLAG_PIXMUX),
   (DBLClk,c'DRM_MODE_FLAG_DBLCLK),
   (ClkDiv2,c'DRM_MODE_FLAG_CLKDIV2)]
 

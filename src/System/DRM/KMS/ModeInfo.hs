@@ -14,7 +14,7 @@ data ModeInfo = ModeInfo
                 } deriving (Show)
 
 type ModeFlags = [ModeFlag]
-data ModeFlag = PHSync | NHSync | PVSync | NVSync | Interlace | DBLScan | CSync | PCSync | NCSync | HSkew | BCast | PixΜx | DBLClk | ClkDiv2 deriving (Show, Eq)
+data ModeFlag = PHSync | NHSync | PVSync | NVSync | Interlace | DBLScan | CSync | PCSync | NCSync | HSkew | BCast | PixMux | DBLClk | ClkDiv2 deriving (Show, Eq)
 
 type ModeType = [ModeTypeFlag]
 data ModeTypeFlag = Builtin | ClockC | CrtcC | Preferred | Default | UserDef | Driver deriving (Show, Eq)
