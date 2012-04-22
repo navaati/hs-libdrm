@@ -1,8 +1,9 @@
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
-module System.DRM.FrameBuffer (Fb(..),getFb,addFb) where
+module System.DRM.FrameBuffer (Fb(..),getFb,addFb,rmFb) where
 
+import Prelude.Unicode
 import Foreign
 import Foreign.C.Error
 import Data.Reflection
@@ -46,3 +47,7 @@ addFb bo = alloca $ \fIdPtr → do
     (reflect (Proxy ∷ Proxy drm)) w h (boDepth bo)
     (boBPP bo) (boPitch bo) (boHandle bo) fIdPtr
   peek fIdPtr
+
+rmFb ∷ (RDrm drm) ⇒
+  FbId drm → IO ()
+rmFb = throwErrnoIfMinus1_ "drmModeRmFB" ∘ applyDrm c'drmModeRmFB

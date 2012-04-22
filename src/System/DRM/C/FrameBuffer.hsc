@@ -24,3 +24,4 @@ import System.Posix.Types
 #ccall drmModeGetFB, Drm → FbId drm → IO (Ptr <drmModeFB>)
 #ccall drmModeFreeFB, Ptr <drmModeFB> → IO ()
 #ccall drmModeAddFB, Drm → Width → Height → Depth → BPP → Pitch → BOHandle drm → Ptr (FbId drm) → IO CInt
+#ccall drmModeRmFB, Drm → FbId drm → IO CInt

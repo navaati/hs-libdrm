@@ -28,6 +28,7 @@ main = withDrm "/dev/dri/card0" $ \p → do
   setCrtc (crtcId crtc) (fbId myFb) (0,0) [(connectorId conn)] mode
   pause
   setCrtc (crtcId crtc) (crtcFbId crtc) (crtcPosition crtc) [(connectorId conn)] mode
+  rmFb $ fbId myFb
   boDestroy myBO
 
 lf ∷ IO ()
