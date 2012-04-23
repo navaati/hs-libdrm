@@ -4,7 +4,6 @@ module System.DRM.Types where
 
 import Foreign
 import System.Posix
-import Data.Proxy
 import Data.Reflection
 
 newtype Drm = Drm Fd
@@ -25,9 +24,6 @@ type Size = Word64
 withSameTagAs ∷ a t -> b t -> a t
 withSameTagAs = const
 
-sameTagProxy ∷ a t -> Proxy t
-sameTagProxy = withSameTagAs Proxy
-
 applyDrm ∷ RDrm drm ⇒
   (Drm → i drm → r) → i drm → r
-applyDrm f i = f (reflect $ sameTagProxy i) i
+applyDrm f i = f (reflect i) i

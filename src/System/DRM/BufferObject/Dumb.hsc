@@ -42,7 +42,7 @@ instance (RDrm drm) ⇒ BufferObject (DumbBO drm) drm where
     allocaBytes (#size struct drm_mode_destroy_dumb) $ \p → do
       (#poke struct drm_mode_destroy_dumb, handle) p handle
       throwErrnoIfMinus1_ "DRM_IOCTL_MODE_DESTROY_DUMB" $
-        drmIoctl (reflect (Proxy ∷ Proxy drm))
+        drmIoctl (reflect handle)
         (#const DRM_IOCTL_MODE_DESTROY_DUMB) p
 
 instance (RDrm drm) ⇒ ImageBO (DumbBO drm) drm where
