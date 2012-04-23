@@ -27,6 +27,7 @@ library
                  ,System.DRM.C.KMS.Connector
                  ,System.DRM.C.KMS.Resources
                  ,System.DRM.C.FrameBuffer
+  c-sources: src/cbits/dumb_mmap.c
   build-depends: base
                  ,base-unicode-symbols
                  ,unix

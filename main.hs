@@ -9,6 +9,7 @@ import System.DRM.KMS.Resources
 import System.DRM.KMS.ModeInfo
 import System.DRM.KMS.Crtc
 import System.DRM.KMS.Connector
+import System.DRM.BufferObject
 import System.DRM.BufferObject.Dumb
 import System.DRM.FrameBuffer
 
