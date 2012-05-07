@@ -1,7 +1,7 @@
 {-# LANGUAGE UnicodeSyntax #-}
 {-# LANGUAGE FlexibleContexts #-}
 
-import Control.Monad.Unicode
+import FunctionalTools.Unicode
 
 import System.DRM
 import System.DRM.KMS.Utils

@@ -1,6 +1,6 @@
 module System.DRM.FFIUtils(cToFlags,flagsToC) where
 
-import Prelude.Unicode
+import FunctionalTools.Unicode
 import Data.Bits
 import Data.Maybe(fromJust)
 import Data.List(foldl')

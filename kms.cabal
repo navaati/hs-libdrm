@@ -28,7 +28,7 @@ library
                  ,System.DRM.C.KMS.Resources
                  ,System.DRM.C.FrameBuffer
   build-depends: base
-                 ,base-unicode-symbols
+                 ,func-tools
                  ,unix
                  ,tagged
                  ,reflection

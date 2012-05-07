@@ -1,7 +1,6 @@
 module System.DRM.KMS.Utils where
 
-import Control.Monad.Unicode
-import Control.Applicative((<$>))
+import FunctionalTools.Unicode
 
 import System.DRM.Types
 import System.DRM.KMS.Resources

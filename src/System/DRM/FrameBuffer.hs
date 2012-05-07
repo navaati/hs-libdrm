@@ -3,7 +3,7 @@
 
 module System.DRM.FrameBuffer (Fb(..),getFb,addFb,rmFb) where
 
-import Prelude.Unicode
+import FunctionalTools.Unicode
 import Foreign
 import Foreign.C.Error
 import Data.Reflection
