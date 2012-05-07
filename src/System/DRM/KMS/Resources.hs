@@ -17,7 +17,7 @@ import System.DRM.C.KMS.Resources
 import System.DRM.Types
 
 data Resources drm = Resources
-                     { resFbs ∷ [FbId drm]
+                     { resFbs ∷ [Fb drm]
                      , resCrtcs ∷ [Crtc drm]
                      , resConnectors ∷ [Connector drm]
                      , resEncoders ∷ [Encoder drm]

@@ -21,7 +21,7 @@ import System.DRM.KMS.ModeInfo
 import System.DRM.C.KMS.ModeInfo
 import System.DRM.Types
 
-crtcFb ∷ (RDrm drm) ⇒ Crtc drm → IO (Maybe (FbId drm))
+crtcFb ∷ (RDrm drm) ⇒ Crtc drm → IO (Maybe (Fb drm))
 crtcFb = fmap (fbToMaybe ∘ c'drmModeCrtc'buffer_id) ∘ getCrtc
   where fbToMaybe buffer_id = if buffer_id ≡ 0 then Nothing else Just $ FbId buffer_id
 
@@ -54,7 +54,7 @@ getCrtc cId = do
   return crtc
 
 setCrtc ∷ (RDrm drm) ⇒
-  Crtc drm → FbId drm → (Word32,Word32) → [Connector drm] → ModeInfo → IO ()
+  Crtc drm → Fb drm → (Word32,Word32) → [Connector drm] → ModeInfo → IO ()
 setCrtc cId fId (x,y) connectors mode =
   throwErrnoIfMinus1_ "drmModeSetCrtc" $
   withArray connectors $

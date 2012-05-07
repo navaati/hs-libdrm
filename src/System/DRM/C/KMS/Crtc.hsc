@@ -27,4 +27,4 @@ import System.Posix.Types
 
 #ccall drmModeGetCrtc, Drm → Crtc drm → IO (Ptr <drmModeCrtc>)
 #ccall drmModeFreeCrtc, Ptr <drmModeCrtc> → IO ()
-#ccall drmModeSetCrtc, Drm → Crtc drm → FbId drm → Word32 → Word32 → Ptr (Connector drm) → CInt → Ptr <drmModeModeInfo> → IO CInt
+#ccall drmModeSetCrtc, Drm → Crtc drm → Fb drm → Word32 → Word32 → Ptr (Connector drm) → CInt → Ptr <drmModeModeInfo> → IO CInt
