@@ -30,7 +30,7 @@ import System.DRM.Types
 import System.DRM.KMS.ModeInfo
 import System.DRM.C.KMS.ModeInfo
 
-connectorCurrentEncoder ∷ (RDrm drm) ⇒ Connector drm → IO (EncoderId drm)
+connectorCurrentEncoder ∷ (RDrm drm) ⇒ Connector drm → IO (Encoder drm)
 connectorCurrentEncoder = fmap (EncoderId ∘ c'drmModeConnector'encoder_id) ∘ getConnector
 
 connectorType ∷ (RDrm drm) ⇒ Connector drm → IO ConnectorType
@@ -70,7 +70,7 @@ connectorProperties =
    (fromIntegral ∘ c'drmModeConnector'count_props) c'drmModeConnector'prop_values)
   <=< getConnector
 
-connectorEncoders ∷ (RDrm drm) ⇒ Connector drm → IO [EncoderId drm]
+connectorEncoders ∷ (RDrm drm) ⇒ Connector drm → IO [Encoder drm]
 connectorEncoders =
   fmap (fmap EncoderId) ∘ liftM2 peekArray
   (fromIntegral ∘ c'drmModeConnector'count_encoders) c'drmModeConnector'encoders

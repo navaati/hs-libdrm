@@ -1,10 +1,16 @@
 {-# LANGUAGE UnicodeSyntax #-}
 {-# LANGUAGE ConstraintKinds #-}
 {-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE RecordWildCards #-}
 
-module System.DRM.KMS.Encoder (Encoder(..),EncoderType(..),getEncoder) where
+module System.DRM.KMS.Encoder
+       ( encoderType
+       , encoderCrtc
+       , encoderPossibleCrtcs
+       , encoderPossibleClones
+       , EncoderType(..)
+       ) where
 
+import FunctionalTools.Unicode
 import Foreign
 import Foreign.C.Error
 import Data.Maybe(fromJust)
@@ -12,32 +18,29 @@ import Data.Maybe(fromJust)
 import System.DRM.C.KMS.Encoder
 import System.DRM.Types
 
-data Encoder drm = Encoder
-                   { encoderId ∷ EncoderId drm
-                   , encoderType ∷ EncoderType
-                   , encoderCrtcId ∷ CrtcId drm
-                   , encoderPossibleCrtcs ∷ Word32
-                   , encoderPossibleClones ∷ Word32
-                   } deriving (Show)
+encoderType ∷ (RDrm drm) ⇒ Encoder drm → IO EncoderType
+encoderType =
+  fmap (fromJust ∘ flip lookup encoderTypeEnum ∘ c'drmModeEncoder'encoder_type)
+  ∘ getEncoder
 
-cToEncoder ∷ C'drmModeEncoder → Encoder drm
-cToEncoder (C'drmModeEncoder{..}) =
-  Encoder
-  (EncoderId c'drmModeEncoder'encoder_id)
-  (fromJust $ lookup c'drmModeEncoder'encoder_type encoderTypeEnum)
-  (CrtcId c'drmModeEncoder'crtc_id)
-  c'drmModeEncoder'possible_crtcs
-  c'drmModeEncoder'possible_clones
+encoderCrtc ∷ (RDrm drm) ⇒ Encoder drm → IO (CrtcId drm)
+encoderCrtc = fmap (CrtcId ∘ c'drmModeEncoder'crtc_id)
+              ∘ getEncoder
+
+encoderPossibleCrtcs ∷ (RDrm drm) ⇒ Encoder drm → IO Word32
+encoderPossibleCrtcs = fmap c'drmModeEncoder'possible_crtcs ∘ getEncoder
+
+encoderPossibleClones ∷ (RDrm drm) ⇒ Encoder drm → IO Word32
+encoderPossibleClones = fmap c'drmModeEncoder'possible_clones ∘ getEncoder
 
 getEncoder ∷ (RDrm drm) ⇒
-  EncoderId drm → IO (Encoder drm)
+  Encoder drm → IO C'drmModeEncoder
 getEncoder eId = do
   ptr ← throwErrnoIfNull "drmModeGetEncoder" $
          applyDrm c'drmModeGetEncoder eId
-  encoder ← fmap cToEncoder $ peek ptr
+  encoder ← peek ptr
   c'drmModeFreeEncoder ptr
   return encoder
-
 
 data EncoderType = EncoderNone | DAC | TMDS | EncoderLVDS | TVDAC deriving (Show, Eq)
 

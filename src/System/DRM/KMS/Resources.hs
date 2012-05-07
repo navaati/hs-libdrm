@@ -20,7 +20,7 @@ data Resources drm = Resources
                      { resFbs ∷ [FbId drm]
                      , resCrtcs ∷ [CrtcId drm]
                      , resConnectors ∷ [Connector drm]
-                     , resEncoders ∷ [EncoderId drm]
+                     , resEncoders ∷ [Encoder drm]
                      , resMinSize, resMaxSize ∷ (Width, Height)
                      } deriving (Show)
 
