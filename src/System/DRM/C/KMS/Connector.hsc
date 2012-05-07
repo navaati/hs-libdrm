@@ -60,5 +60,5 @@ import System.Posix.Types
 #num DRM_MODE_CONNECTOR_TV
 #num DRM_MODE_CONNECTOR_eDP
 
-#ccall drmModeGetConnector, Drm → ConnectorId drm → IO (Ptr <drmModeConnector>)
+#ccall drmModeGetConnector, Drm → Connector drm → IO (Ptr <drmModeConnector>)
 #ccall drmModeFreeConnector, Ptr <drmModeConnector> → IO ()

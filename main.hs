@@ -8,7 +8,6 @@ import System.DRM.KMS.Utils
 import System.DRM.KMS.Resources
 import System.DRM.KMS.ModeInfo
 import System.DRM.KMS.Crtc
-import System.DRM.KMS.Connector
 import System.DRM.BufferObject.Dumb
 import System.DRM.KMS.FrameBuffer
 
@@ -25,9 +24,9 @@ main = withDrm "/dev/dri/card0" $ \p → do
   print (myBO `withSameTagAs` p)
   myFb ← getFb =≪ addFb myBO
   print myFb
-  setCrtc (crtcId crtc) (fbId myFb) (0,0) [(connectorId conn)] mode
+  setCrtc (crtcId crtc) (fbId myFb) (0,0) [conn] mode
   pause
-  setCrtc (crtcId crtc) (crtcFbId crtc) (crtcPosition crtc) [(connectorId conn)] mode
+  setCrtc (crtcId crtc) (crtcFbId crtc) (crtcPosition crtc) [conn] mode
   rmFb $ fbId myFb
   boDestroy myBO
 

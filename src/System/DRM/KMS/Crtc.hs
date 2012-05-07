@@ -58,7 +58,7 @@ getCrtc cId = do
   return crtc
 
 setCrtc ∷ (RDrm drm) ⇒
-  CrtcId drm → FbId drm → (Word32,Word32) → [ConnectorId drm] → ModeInfo → IO ()
+  CrtcId drm → FbId drm → (Word32,Word32) → [Connector drm] → ModeInfo → IO ()
 setCrtc cId fId (x,y) connectors mode =
   throwErrnoIfMinus1_ "drmModeAddFB" $
   withArray connectors $
