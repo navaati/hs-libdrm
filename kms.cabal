@@ -19,14 +19,14 @@ library
                    ,System.DRM.KMS.Resources
                    ,System.DRM.BufferObject
                    ,System.DRM.BufferObject.Dumb
-                   ,System.DRM.FrameBuffer
+                   ,System.DRM.KMS.FrameBuffer
   other-modules: System.DRM.FFIUtils
                  ,System.DRM.C.KMS.ModeInfo
                  ,System.DRM.C.KMS.Crtc
                  ,System.DRM.C.KMS.Encoder
                  ,System.DRM.C.KMS.Connector
                  ,System.DRM.C.KMS.Resources
-                 ,System.DRM.C.FrameBuffer
+                 ,System.DRM.C.KMS.FrameBuffer
   build-depends: base
                  ,func-tools
                  ,unix

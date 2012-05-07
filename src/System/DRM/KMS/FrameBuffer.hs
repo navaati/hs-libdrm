@@ -4,7 +4,7 @@
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
-module System.DRM.FrameBuffer (Fb(..),getFb,addFb,rmFb) where
+module System.DRM.KMS.FrameBuffer (Fb(..),getFb,addFb,rmFb) where
 
 import FunctionalTools.Unicode
 import Foreign
@@ -12,7 +12,7 @@ import Foreign.C.Error
 import Data.Reflection
 import Data.Proxy
 
-import System.DRM.C.FrameBuffer
+import System.DRM.C.KMS.FrameBuffer
 import System.DRM.Types
 import System.DRM.BufferObject
 

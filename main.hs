@@ -10,7 +10,7 @@ import System.DRM.KMS.ModeInfo
 import System.DRM.KMS.Crtc
 import System.DRM.KMS.Connector
 import System.DRM.BufferObject.Dumb
-import System.DRM.FrameBuffer
+import System.DRM.KMS.FrameBuffer
 
 main ∷ IO ()
 main = withDrm "/dev/dri/card0" $ \p → do
