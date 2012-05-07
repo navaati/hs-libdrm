@@ -19,5 +19,6 @@ connectedResources ∷ (RDrm drm) ⇒
 connectedResources = (resConnectors ⋙ filterM (isConnected)) >=>
   mapM (\conn → do
            enc ← connectorCurrentEncoder conn
-           crtc ← getCrtc =≪ encoderCrtc enc
-           return (conn,enc,crtc,crtcMode crtc))
+           crtc ← encoderCrtc enc
+           Just mode ← crtcMode crtc
+           return (conn,enc,crtc,mode))

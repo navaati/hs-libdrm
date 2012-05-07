@@ -23,7 +23,7 @@ encoderType =
   fmap (fromJust ∘ flip lookup encoderTypeEnum ∘ c'drmModeEncoder'encoder_type)
   ∘ getEncoder
 
-encoderCrtc ∷ (RDrm drm) ⇒ Encoder drm → IO (CrtcId drm)
+encoderCrtc ∷ (RDrm drm) ⇒ Encoder drm → IO (Crtc drm)
 encoderCrtc = fmap (CrtcId ∘ c'drmModeEncoder'crtc_id)
               ∘ getEncoder
 

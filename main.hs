@@ -2,6 +2,7 @@
 {-# LANGUAGE FlexibleContexts #-}
 
 import FunctionalTools.Unicode
+import Data.Maybe(fromJust)
 
 import System.DRM
 import System.DRM.KMS.Utils
@@ -15,18 +16,19 @@ main ∷ IO ()
 main = withDrm "/dev/dri/card0" $ \p → do
   (conn,_,crtc,mode):_ ← connectedResources =≪ getResources
   putStrLn "FBCon :"
-  print (crtc `withSameTagAs` p)
-  print =≪ getFb (crtcFbId crtc)
+  oldFb ← (getFb ∘ fromJust) =≪ crtcFb (crtc `withSameTagAs` p)
+  print oldFb
+  oldPosition ← crtcPosition crtc
   let (w,h) = modeDisplay mode
   lf
   putStrLn "My buffer :"
   myBO ← let fI = fromIntegral in createDumbBO (fI w) (fI h)
-  print (myBO `withSameTagAs` p)
+  print myBO
   myFb ← getFb =≪ addFb myBO
   print myFb
-  setCrtc (crtcId crtc) (fbId myFb) (0,0) [conn] mode
+  setCrtc crtc (fbId myFb) (0,0) [conn] mode
   pause
-  setCrtc (crtcId crtc) (crtcFbId crtc) (crtcPosition crtc) [conn] mode
+  setCrtc crtc (fbId oldFb) oldPosition [conn] mode
   rmFb $ fbId myFb
   boDestroy myBO
 

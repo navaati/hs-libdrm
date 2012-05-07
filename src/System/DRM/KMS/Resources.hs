@@ -18,7 +18,7 @@ import System.DRM.Types
 
 data Resources drm = Resources
                      { resFbs ∷ [FbId drm]
-                     , resCrtcs ∷ [CrtcId drm]
+                     , resCrtcs ∷ [Crtc drm]
                      , resConnectors ∷ [Connector drm]
                      , resEncoders ∷ [Encoder drm]
                      , resMinSize, resMaxSize ∷ (Width, Height)
