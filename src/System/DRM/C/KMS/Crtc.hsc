@@ -1,3 +1,4 @@
+{-# LANGUAGE UnicodeSyntax #-}
 {-# LANGUAGE ForeignFunctionInterface #-}
 {-# OPTIONS_GHC -fno-warn-unused-imports #-}
 

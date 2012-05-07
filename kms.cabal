@@ -33,9 +33,6 @@ library
                  ,tagged
                  ,reflection
                  ,bindings-DSL
-  extensions: UnicodeSyntax
-              ,FlexibleContexts
-              ,ConstraintKinds
   ghc-options: -Wall
   build-tools: hsc2hs
   pkgconfig-depends: libdrm

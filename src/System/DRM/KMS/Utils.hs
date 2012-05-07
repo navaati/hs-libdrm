@@ -1,3 +1,7 @@
+{-# LANGUAGE UnicodeSyntax #-}
+{-# LANGUAGE ConstraintKinds #-}
+{-# LANGUAGE FlexibleContexts #-}
+
 module System.DRM.KMS.Utils where
 
 import FunctionalTools.Unicode

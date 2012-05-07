@@ -1,3 +1,6 @@
+{-# LANGUAGE UnicodeSyntax #-}
+{-# LANGUAGE ConstraintKinds #-}
+{-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE RecordWildCards #-}
 
 module System.DRM.KMS.Connector (Connector(..),getConnector,Connection(..),isConnected,SubPixel(..),ConnectorType(..),Property(..)) where

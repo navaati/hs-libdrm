@@ -1,3 +1,5 @@
+{-# LANGUAGE UnicodeSyntax #-}
+
 module System.DRM.FFIUtils(cToFlags,flagsToC) where
 
 import FunctionalTools.Unicode

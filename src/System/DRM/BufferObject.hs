@@ -1,3 +1,4 @@
+{-# LANGUAGE UnicodeSyntax #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE FunctionalDependencies #-}
 
