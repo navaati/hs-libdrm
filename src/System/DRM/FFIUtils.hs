@@ -12,5 +12,5 @@ cToFlags table cword = filter (isFlagSet ∘ eToF table) $ map fst table
 flagsToC ∷ (Bits f, Eq e) ⇒ [(e,f)] → [e] → f
 flagsToC table = foldl' (.|.) 0 ∘ map (eToF table)
 
-eToF ∷ Eq α => [(α, γ)] -> α -> γ
+eToF ∷ Eq α ⇒ [(α, γ)] → α → γ
 eToF table = fromJust ∘ flip lookup table

@@ -22,10 +22,10 @@ type BPP = Word8
 type Depth = Word8
 type Size = Word64
 
-withSameTagAs ∷ a t -> b t -> a t
+withSameTagAs ∷ a t → b t → a t
 withSameTagAs = const
 
-sameTagProxy ∷ a t -> Proxy t
+sameTagProxy ∷ a t → Proxy t
 sameTagProxy = withSameTagAs Proxy
 
 applyDrm ∷ RDrm drm ⇒
