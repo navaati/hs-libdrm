@@ -1,6 +1,5 @@
 {-# LANGUAGE UnicodeSyntax #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE FunctionalDependencies #-}
+{-# LANGUAGE TypeFamilies #-}
 
 module System.DRM.BufferObject where
 
@@ -8,12 +7,13 @@ import Data.Word
 
 import System.DRM.Types
 
-class BufferObject bo drm | bo → drm where
-  boHandle ∷ bo → BOHandle drm
+class BufferObject bo where
+  type BOHandle bo
+  boHandle ∷ bo → BOHandle bo
   boSize ∷ bo → Size
   boDestroy ∷ bo → IO ()
 
-class (BufferObject bo drm) ⇒ ImageBO bo drm | bo → drm where
+class (BufferObject bo) ⇒ ImageBO bo where
   boRes ∷ bo → (Width, Height)
   boPitch ∷ bo → Pitch
   boBPP ∷ bo → BPP

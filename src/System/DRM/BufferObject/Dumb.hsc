@@ -1,8 +1,8 @@
 {-# LANGUAGE UnicodeSyntax #-}
 {-# LANGUAGE ConstraintKinds #-}
 {-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE UndecidableInstances #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE ForeignFunctionInterface #-}
 
@@ -20,7 +20,7 @@ import Data.Proxy
 import System.DRM.Types
 import System.DRM.BufferObject
 
-data DumbBO drm = DumbBO (BOHandle drm) (Width,Height) Pitch Size deriving (Show)
+data DumbBO drm = DumbBO (DrmBOHandle drm) (Width,Height) Pitch Size deriving (Show)
 
 createDumbBO ∷ ∀drm. (RDrm drm) ⇒
   Width → Height → IO (DumbBO drm)
@@ -38,7 +38,8 @@ createDumbBO w h =
     pitch ← (#peek struct drm_mode_create_dumb, pitch) p
     return $ DumbBO handle (w,h) pitch size
 
-instance (RDrm drm) ⇒ BufferObject (DumbBO drm) drm where
+instance (RDrm drm) ⇒ BufferObject (DumbBO drm) where
+  type BOHandle (DumbBO drm) = DrmBOHandle drm
   boHandle (DumbBO handle _ _ _) = handle
   boSize (DumbBO _ _ _ size) = size
   boDestroy (DumbBO handle _ _ _) =
@@ -48,7 +49,7 @@ instance (RDrm drm) ⇒ BufferObject (DumbBO drm) drm where
         drmIoctl (reflect (Proxy ∷ Proxy drm))
         (#const DRM_IOCTL_MODE_DESTROY_DUMB) p
 
-instance (RDrm drm) ⇒ ImageBO (DumbBO drm) drm where
+instance (RDrm drm) ⇒ ImageBO (DumbBO drm) where
   boRes (DumbBO _ res _ _) = res
   boPitch (DumbBO _ _ pitch _) = pitch
   boBPP _ = fromIntegral bpp
