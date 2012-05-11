@@ -20,10 +20,6 @@ newtype BOHandle drm = BOHandle Word32 deriving (Show, Storable, Eq)
 
 type Width = Word32
 type Height = Word32
-type Pitch = Word32
-type BPP = Word8
-type Depth = Word8
-type Size = Word64
 
 withSameTagAs ∷ a t → b t → a t
 withSameTagAs = const

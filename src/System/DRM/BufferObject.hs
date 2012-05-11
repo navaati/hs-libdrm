@@ -4,6 +4,8 @@
 
 module System.DRM.BufferObject where
 
+import Data.Word
+
 import System.DRM.Types
 
 class BufferObject bo drm | bo → drm where
@@ -16,3 +18,9 @@ class (BufferObject bo drm) ⇒ ImageBO bo drm | bo → drm where
   boPitch ∷ bo → Pitch
   boBPP ∷ bo → BPP
   boDepth ∷ bo → Depth
+
+
+type Pitch = Word32
+type BPP = Word8
+type Depth = Word8
+type Size = Word64

@@ -9,6 +9,7 @@
 
 module System.DRM.C.KMS.FrameBuffer where
 #strict_import
+import System.DRM.BufferObject
 import System.DRM.Types
 import System.Posix.Types
 
