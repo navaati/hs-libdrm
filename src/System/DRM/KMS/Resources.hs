@@ -1,10 +1,13 @@
+{-# LANGUAGE UnicodeSyntax #-}
+{-# LANGUAGE ConstraintKinds #-}
+{-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE NoMonomorphismRestriction #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE RecordWildCards #-}
 
 module System.DRM.KMS.Resources (Resources(..), getResources) where
 
-import Control.Monad.Unicode
+import FunctionalTools.Unicode
 import Foreign
 import Foreign.C
 import Data.Reflection

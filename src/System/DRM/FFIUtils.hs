@@ -1,6 +1,8 @@
+{-# LANGUAGE UnicodeSyntax #-}
+
 module System.DRM.FFIUtils(cToFlags,flagsToC) where
 
-import Prelude.Unicode
+import FunctionalTools.Unicode
 import Data.Bits
 import Data.Maybe(fromJust)
 import Data.List(foldl')
@@ -12,5 +14,5 @@ cToFlags table cword = filter (isFlagSet ∘ eToF table) $ map fst table
 flagsToC ∷ (Bits f, Eq e) ⇒ [(e,f)] → [e] → f
 flagsToC table = foldl' (.|.) 0 ∘ map (eToF table)
 
-eToF ∷ Eq α => [(α, γ)] -> α -> γ
+eToF ∷ Eq α ⇒ [(α, γ)] → α → γ
 eToF table = fromJust ∘ flip lookup table

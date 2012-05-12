@@ -1,3 +1,5 @@
+{-# LANGUAGE UnicodeSyntax #-}
+
 module System.DRM.KMS.ModeInfo where
 
 import Data.Word

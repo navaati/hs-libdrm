@@ -1,9 +1,11 @@
+{-# LANGUAGE UnicodeSyntax #-}
+{-# LANGUAGE ConstraintKinds #-}
+{-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE RecordWildCards #-}
 
 module System.DRM.KMS.Connector (Connector(..),getConnector,Connection(..),isConnected,SubPixel(..),ConnectorType(..),Property(..)) where
 
-import Prelude.Unicode
-import Control.Monad.Unicode
+import FunctionalTools.Unicode
 import Foreign
 import Foreign.C
 import Data.Maybe(fromJust)

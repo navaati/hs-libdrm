@@ -19,24 +19,21 @@ library
                    ,System.DRM.KMS.Resources
                    ,System.DRM.BufferObject
                    ,System.DRM.BufferObject.Dumb
-                   ,System.DRM.FrameBuffer
+                   ,System.DRM.KMS.FrameBuffer
   other-modules: System.DRM.FFIUtils
                  ,System.DRM.C.KMS.ModeInfo
                  ,System.DRM.C.KMS.Crtc
                  ,System.DRM.C.KMS.Encoder
                  ,System.DRM.C.KMS.Connector
                  ,System.DRM.C.KMS.Resources
-                 ,System.DRM.C.FrameBuffer
+                 ,System.DRM.C.KMS.FrameBuffer
   c-sources: src/cbits/dumb_mmap.c
   build-depends: base
-                 ,base-unicode-symbols
+                 ,func-tools
                  ,unix
                  ,tagged
                  ,reflection
                  ,bindings-DSL
-  extensions: UnicodeSyntax
-              ,FlexibleContexts
-              ,ConstraintKinds
   ghc-options: -Wall
   build-tools: hsc2hs
   pkgconfig-depends: libdrm

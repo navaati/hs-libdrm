@@ -1,3 +1,4 @@
+{-# LANGUAGE UnicodeSyntax #-}
 {-# LANGUAGE RecordWildCards #-}
 {-# OPTIONS_GHC -fno-warn-unused-imports #-}
 {-# OPTIONS_GHC -fno-warn-unused-binds #-}
@@ -9,7 +10,7 @@
 
 module System.DRM.C.KMS.ModeInfo (C'drmModeModeInfo,cToModeInfo,modeInfoToC) where
 #strict_import
-import Prelude.Unicode
+import FunctionalTools.Unicode
 import Foreign.C.String(castCCharToChar,castCharToCChar)
 import System.DRM.FFIUtils
 

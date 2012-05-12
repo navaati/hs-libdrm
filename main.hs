@@ -1,7 +1,7 @@
 {-# LANGUAGE UnicodeSyntax #-}
 {-# LANGUAGE FlexibleContexts #-}
 
-import Control.Monad.Unicode
+import FunctionalTools.Unicode
 
 import System.DRM
 import System.DRM.KMS.Utils
@@ -11,7 +11,7 @@ import System.DRM.KMS.Crtc
 import System.DRM.KMS.Connector
 import System.DRM.BufferObject
 import System.DRM.BufferObject.Dumb
-import System.DRM.FrameBuffer
+import System.DRM.KMS.FrameBuffer
 
 main ∷ IO ()
 main = withDrm "/dev/dri/card0" $ \p → do

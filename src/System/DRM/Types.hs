@@ -1,3 +1,6 @@
+{-# LANGUAGE UnicodeSyntax #-}
+{-# LANGUAGE ConstraintKinds #-}
+{-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 
 module System.DRM.Types where
@@ -21,7 +24,7 @@ type BPP = Word8
 type Depth = Word8
 type Size = Word64
 
-withSameTagAs ∷ a t -> b t -> a t
+withSameTagAs ∷ a t → b t → a t
 withSameTagAs = const
 
 applyDrm ∷ RDrm drm ⇒

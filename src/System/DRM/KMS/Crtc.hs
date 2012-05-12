@@ -1,3 +1,6 @@
+{-# LANGUAGE UnicodeSyntax #-}
+{-# LANGUAGE ConstraintKinds #-}
+{-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE RecordWildCards #-}
 
 module System.DRM.KMS.Crtc (Crtc(..),getCrtc,setCrtc) where
@@ -58,6 +61,8 @@ setCrtc ∷ (RDrm drm) ⇒
   CrtcId drm → FbId drm → (Word32,Word32) → [ConnectorId drm] → ModeInfo → IO ()
 setCrtc cId fId (x,y) connectors mode =
   throwErrnoIfMinus1_ "drmModeAddFB" $
-  withArray connectors $ \connA → with (modeInfoToC mode) $ \modeP → do
+  withArray connectors $
+  \connA → with (modeInfoToC mode) $
+   \modeP →
     applyDrm c'drmModeSetCrtc cId fId x y
-      connA (genericLength connectors) modeP
+    connA (genericLength connectors) modeP

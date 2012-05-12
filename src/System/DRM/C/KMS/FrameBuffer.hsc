@@ -1,3 +1,4 @@
+{-# LANGUAGE UnicodeSyntax #-}
 {-# LANGUAGE ForeignFunctionInterface #-}
 {-# OPTIONS_GHC -fno-warn-unused-imports #-}
 
@@ -6,7 +7,7 @@
 #include<stdint.h>
 #include<xf86drmMode.h>
 
-module System.DRM.C.FrameBuffer where
+module System.DRM.C.KMS.FrameBuffer where
 #strict_import
 import System.DRM.Types
 import System.Posix.Types
