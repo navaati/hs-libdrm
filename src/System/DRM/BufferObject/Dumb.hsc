@@ -1,8 +1,8 @@
 {-# LANGUAGE UnicodeSyntax #-}
 {-# LANGUAGE ConstraintKinds #-}
 {-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE UndecidableInstances #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE ForeignFunctionInterface #-}
 
@@ -22,7 +22,7 @@ import System.DRM.Types
 import System.DRM.BufferObject
 
 data DumbBO drm = DumbBO
-                  (BOHandle drm)
+                  (DrmBOHandle drm)
                   (Width,Height) Pitch Size
                   (Ptr ()) deriving Show
 
@@ -50,7 +50,8 @@ createDumbBO w h =
         dumb_mmap (fromIntegral size) (reflect handle) offset
     return $ DumbBO handle (w,h) pitch size (intPtrToPtr mapPtr)
 
-instance (RDrm drm) ⇒ BufferObject (DumbBO drm) drm where
+instance (RDrm drm) ⇒ BufferObject (DumbBO drm) where
+  type BOHandle (DumbBO drm) = DrmBOHandle drm
   boHandle (DumbBO handle _ _ _ _) = handle
   boSize (DumbBO _ _ _ size _) = size
   boDestroy (DumbBO handle _ _ size mapPtr) = do
@@ -61,7 +62,7 @@ instance (RDrm drm) ⇒ BufferObject (DumbBO drm) drm where
         drmIoctl (reflect handle)
         (#const DRM_IOCTL_MODE_DESTROY_DUMB) p
 
-instance (RDrm drm) ⇒ ImageBO (DumbBO drm) drm where
+instance (RDrm drm) ⇒ ImageBO (DumbBO drm) where
   boRes (DumbBO _ res _ _ _) = res
   boPitch (DumbBO _ _ pitch _ _) = pitch
   boBPP _ = fromIntegral bpp
@@ -70,7 +71,7 @@ instance (RDrm drm) ⇒ ImageBO (DumbBO drm) drm where
 bpp ∷ Word32
 bpp = 32
 
-instance (RDrm drm) ⇒ MappableBO (DumbBO drm) drm where
+instance (RDrm drm) ⇒ MappableBO (DumbBO drm) where
   boMap (DumbBO _ _ _ _ mapPtr) = return $ castPtr mapPtr
 
 

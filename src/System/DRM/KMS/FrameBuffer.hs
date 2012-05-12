@@ -1,6 +1,7 @@
 {-# LANGUAGE UnicodeSyntax #-}
 {-# LANGUAGE ConstraintKinds #-}
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
@@ -21,7 +22,7 @@ data Fb drm = Fb
               , fbRes ∷ (Width,Height)
               , fbPitch ∷ Pitch
               , fbBPP, fbDepth ∷ Word32
-              , fbHandle ∷ BOHandle drm
+              , fbHandle ∷ DrmBOHandle drm
               } deriving (Show)
 
 cToFb ∷ C'drmModeFB → Fb drm
@@ -32,7 +33,7 @@ cToFb (C'drmModeFB{..}) =
   c'drmModeFB'pitch
   c'drmModeFB'bpp
   c'drmModeFB'depth
-  (BOHandle c'drmModeFB'handle)
+  (DrmBOHandle c'drmModeFB'handle)
 
 getFb ∷ (RDrm drm) ⇒
   FbId drm → IO (Fb drm)
@@ -43,7 +44,7 @@ getFb fId = do
   c'drmModeFreeFB ptr
   return $ cToFb fb
 
-addFb ∷ ∀drm bo. (RDrm drm, ImageBO bo drm) ⇒ bo → IO (FbId drm)
+addFb ∷ ∀drm bo. (RDrm drm, ImageBO bo, BOHandle bo ~ DrmBOHandle drm) ⇒ bo → IO (FbId drm)
 addFb bo = alloca $ \fIdPtr → do
   let (w,h) = boRes bo
   throwErrnoIfMinus1_ "drmModeAddFB" $ c'drmModeAddFB

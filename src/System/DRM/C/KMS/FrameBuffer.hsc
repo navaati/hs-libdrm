@@ -9,6 +9,7 @@
 
 module System.DRM.C.KMS.FrameBuffer where
 #strict_import
+import System.DRM.BufferObject
 import System.DRM.Types
 import System.Posix.Types
 
@@ -24,5 +25,5 @@ import System.Posix.Types
 
 #ccall drmModeGetFB, Drm → FbId drm → IO (Ptr <drmModeFB>)
 #ccall drmModeFreeFB, Ptr <drmModeFB> → IO ()
-#ccall drmModeAddFB, Drm → Width → Height → Depth → BPP → Pitch → BOHandle drm → Ptr (FbId drm) → IO CInt
+#ccall drmModeAddFB, Drm → Width → Height → Depth → BPP → Pitch → DrmBOHandle drm → Ptr (FbId drm) → IO CInt
 #ccall drmModeRmFB, Drm → FbId drm → IO CInt
