@@ -16,9 +16,9 @@ import System.DRM.KMS.ModeInfo
 connectedResources ∷ (RDrm drm) ⇒
   Resources drm →
   IO [(Connector drm,Encoder drm,Crtc drm,ModeInfo)]
-connectedResources res =
-  (filter isConnected <$> mapM getConnector (resConnectors res) ≫=) $
-   mapM $ \conn → do
-     enc ← getEncoder $ connectorCurrentEncoder conn
-     crtc ← getCrtc $ encoderCrtcId enc
-     return (conn,enc,crtc,crtcMode crtc)
+connectedResources = (resConnectors ⋙ filterM (isConnected)) >=>
+  mapM (\conn → do
+           enc ← connectorCurrentEncoder conn
+           crtc ← encoderCrtc enc
+           Just mode ← crtcMode crtc
+           return (conn,enc,crtc,mode))

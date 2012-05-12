@@ -17,10 +17,10 @@ import System.DRM.C.KMS.Resources
 import System.DRM.Types
 
 data Resources drm = Resources
-                     { resFbs ∷ [FbId drm]
-                     , resCrtcs ∷ [CrtcId drm]
-                     , resConnectors ∷ [ConnectorId drm]
-                     , resEncoders ∷ [EncoderId drm]
+                     { resFbs ∷ [Fb drm]
+                     , resCrtcs ∷ [Crtc drm]
+                     , resConnectors ∷ [Connector drm]
+                     , resEncoders ∷ [Encoder drm]
                      , resMinSize, resMaxSize ∷ (Width, Height)
                      } deriving (Show)
 
