@@ -26,5 +26,5 @@ import System.Posix.Types
 #num DRM_MODE_ENCODER_LVDS
 #num DRM_MODE_ENCODER_TVDAC
 
-#ccall drmModeGetEncoder, Drm → EncoderId drm → IO (Ptr <drmModeEncoder>)
+#ccall drmModeGetEncoder, Drm → Encoder drm → IO (Ptr <drmModeEncoder>)
 #ccall drmModeFreeEncoder, Ptr <drmModeEncoder> → IO ()

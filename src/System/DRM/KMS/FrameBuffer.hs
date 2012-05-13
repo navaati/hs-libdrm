@@ -2,10 +2,17 @@
 {-# LANGUAGE ConstraintKinds #-}
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
-module System.DRM.KMS.FrameBuffer (Fb(..),getFb,addFb,rmFb) where
+module System.DRM.KMS.FrameBuffer
+       ( fbRes
+       , fbPitch
+       , fbBPP
+       , fbDepth
+       , fbHandle
+       , addFb
+       , rmFb
+       ) where
 
 import FunctionalTools.Unicode
 import Foreign
@@ -17,34 +24,32 @@ import System.DRM.C.KMS.FrameBuffer
 import System.DRM.Types
 import System.DRM.BufferObject
 
-data Fb drm = Fb
-              { fbId ∷ FbId drm
-              , fbRes ∷ (Width,Height)
-              , fbPitch ∷ Pitch
-              , fbBPP, fbDepth ∷ Word32
-              , fbHandle ∷ DrmBOHandle drm
-              } deriving (Show)
+fbRes ∷ (RDrm drm) ⇒ Fb drm → IO (Width,Height)
+fbRes = fmap (c'drmModeFB'width &&& c'drmModeFB'height) ∘ getFb
 
-cToFb ∷ C'drmModeFB → Fb drm
-cToFb (C'drmModeFB{..}) =
-  Fb
-  (FbId c'drmModeFB'fb_id)
-  (c'drmModeFB'width,c'drmModeFB'height)
-  c'drmModeFB'pitch
-  c'drmModeFB'bpp
-  c'drmModeFB'depth
-  (DrmBOHandle c'drmModeFB'handle)
+fbPitch ∷ (RDrm drm) ⇒ Fb drm → IO Pitch
+fbPitch = fmap c'drmModeFB'pitch ∘ getFb
+
+fbBPP ∷ (RDrm drm) ⇒ Fb drm → IO Word32
+fbBPP = fmap c'drmModeFB'bpp ∘ getFb
+
+fbDepth ∷ (RDrm drm) ⇒ Fb drm → IO Word32
+fbDepth = fmap c'drmModeFB'depth ∘ getFb
+
+fbHandle ∷ (RDrm drm) ⇒ Fb drm → IO (DrmBOHandle drm)
+fbHandle = fmap (DrmBOHandle ∘ c'drmModeFB'handle) ∘ getFb
+
 
 getFb ∷ (RDrm drm) ⇒
-  FbId drm → IO (Fb drm)
+  Fb drm → IO C'drmModeFB
 getFb fId = do
   ptr ← throwErrnoIfNull "drmModeGetFB" $
          applyDrm c'drmModeGetFB fId
   fb ← peek ptr
   c'drmModeFreeFB ptr
-  return $ cToFb fb
+  return fb
 
-addFb ∷ ∀drm bo. (RDrm drm, ImageBO bo, BOHandle bo ~ DrmBOHandle drm) ⇒ bo → IO (FbId drm)
+addFb ∷ ∀drm bo. (RDrm drm, ImageBO bo, BOHandle bo ~ DrmBOHandle drm) ⇒ bo → IO (Fb drm)
 addFb bo = alloca $ \fIdPtr → do
   let (w,h) = boRes bo
   throwErrnoIfMinus1_ "drmModeAddFB" $ c'drmModeAddFB
@@ -53,5 +58,5 @@ addFb bo = alloca $ \fIdPtr → do
   peek fIdPtr
 
 rmFb ∷ (RDrm drm) ⇒
-  FbId drm → IO ()
+  Fb drm → IO ()
 rmFb = throwErrnoIfMinus1_ "drmModeRmFB" ∘ applyDrm c'drmModeRmFB

@@ -11,10 +11,10 @@ import Data.Reflection
 
 newtype Drm = Drm Fd
 type RDrm drm = (Reifies drm Drm)
-newtype FbId drm = FbId Word32 deriving (Show, Storable, Eq)
-newtype CrtcId drm = CrtcId Word32 deriving (Show, Storable, Eq)
-newtype ConnectorId drm = ConnectorId Word32 deriving (Show, Storable, Eq)
-newtype EncoderId drm = EncoderId Word32 deriving (Show, Storable, Eq)
+newtype Fb drm = FbId Word32 deriving (Show, Storable, Eq)
+newtype Crtc drm = CrtcId Word32 deriving (Show, Storable, Eq)
+newtype Connector drm = ConnectorId Word32 deriving (Show, Storable, Eq)
+newtype Encoder drm = EncoderId Word32 deriving (Show, Storable, Eq)
 newtype DrmBOHandle drm = DrmBOHandle Word32 deriving (Show, Storable, Eq)
 
 type Width = Word32

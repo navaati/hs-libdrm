@@ -1,11 +1,26 @@
 {-# LANGUAGE UnicodeSyntax #-}
 {-# LANGUAGE ConstraintKinds #-}
 {-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE RecordWildCards #-}
 
-module System.DRM.KMS.Connector (Connector(..),getConnector,Connection(..),isConnected,SubPixel(..),ConnectorType(..),Property(..)) where
+module System.DRM.KMS.Connector
+       ( connectorCurrentEncoder
+       , connectorType
+       , connectorTypeId
+       , connectorConnection
+       , connectorSize
+       , connectorSubpixel
+       , connectorModes
+       , connectorProperties
+       , connectorEncoders
+       , Connection(..)
+       , isConnected
+       , SubPixel(..)
+       , ConnectorType(..)
+       , Property(..)
+       ) where
 
 import FunctionalTools.Unicode
+
 import Foreign
 import Foreign.C
 import Data.Maybe(fromJust)
@@ -15,49 +30,58 @@ import System.DRM.Types
 import System.DRM.KMS.ModeInfo
 import System.DRM.C.KMS.ModeInfo
 
-data Connector drm = Connector
-                     { connectorId ∷ ConnectorId drm
-                     , connectorCurrentEncoder ∷ EncoderId drm
-                     , connectorType ∷ ConnectorType
-                     , connectorTypeId ∷ Word32
-                     , connectorConnection ∷ Connection
-                     , mmSize ∷ (Width,Height)
-                     , connectorSubpixel ∷ SubPixel
-                     , connectorModeInfo ∷ [ModeInfo]
-                     , connectorProperties ∷ [Property]
-                     , connectorEncoders ∷ [EncoderId drm]
-                     } deriving (Show)
+connectorCurrentEncoder ∷ (RDrm drm) ⇒ Connector drm → IO (Encoder drm)
+connectorCurrentEncoder = fmap (EncoderId ∘ c'drmModeConnector'encoder_id) ∘ getConnector
 
-cToConnector ∷ C'drmModeConnector → IO (Connector drm)
-cToConnector (C'drmModeConnector{..}) = do
-  let fI = fromIntegral
-  cModes ← peekArray
-    (fI c'drmModeConnector'count_modes) c'drmModeConnector'modes
-  props ← peekArray
-    (fI c'drmModeConnector'count_props) c'drmModeConnector'props
-  prop_values ← peekArray
-    (fI c'drmModeConnector'count_props) c'drmModeConnector'prop_values
-  encoders ← peekArray
-    (fI c'drmModeConnector'count_encoders) c'drmModeConnector'encoders
-  return $ Connector
-    (ConnectorId c'drmModeConnector'connector_id)
-    (EncoderId c'drmModeConnector'encoder_id)
-    (fromJust $ lookup c'drmModeConnector'connector_type
-     connectorTypeEnum)
-    c'drmModeConnector'connector_type_id
-    (fromJust $ lookup c'drmModeConnector'connection connectionEnum)
-    (c'drmModeConnector'mmWidth,c'drmModeConnector'mmHeight)
-    (fromJust $ lookup c'drmModeConnector'subpixel subpixelEnum)
-    (fmap cToModeInfo cModes)
-    (zipWith (const ∘ const ()) props prop_values)
-    (fmap EncoderId encoders)
+connectorType ∷ (RDrm drm) ⇒ Connector drm → IO ConnectorType
+connectorType =
+  fmap (fromJust ∘ flip lookup connectorTypeEnum ∘ c'drmModeConnector'connector_type)
+  ∘ getConnector
+
+connectorTypeId ∷ (RDrm drm) ⇒ Connector drm → IO Word32
+connectorTypeId = fmap c'drmModeConnector'connector_type_id ∘ getConnector
+
+connectorConnection ∷ (RDrm drm) ⇒ Connector drm → IO Connection
+connectorConnection =
+  fmap (fromJust ∘ flip lookup connectionEnum ∘ c'drmModeConnector'connection)
+  ∘ getConnector
+
+connectorSize ∷ (RDrm drm) ⇒ Connector drm → IO (Width,Height)
+connectorSize = fmap (c'drmModeConnector'mmWidth &&& c'drmModeConnector'mmHeight)
+                ∘ getConnector
+
+connectorSubpixel ∷ (RDrm drm) ⇒ Connector drm → IO SubPixel
+connectorSubpixel =
+  fmap (fromJust ∘ flip lookup subpixelEnum ∘ c'drmModeConnector'subpixel)
+  ∘ getConnector
+
+connectorModes ∷ (RDrm drm) ⇒ Connector drm → IO [ModeInfo]
+connectorModes =
+  fmap (fmap cToModeInfo) ∘ liftM2 peekArray
+  (fromIntegral ∘ c'drmModeConnector'count_modes) c'drmModeConnector'modes
+  <=< getConnector
+
+connectorProperties ∷ (RDrm drm) ⇒ Connector drm → IO [Property]
+connectorProperties =
+  liftM2 (liftM2 $ zipWith (const ∘ const ()))
+  (liftM2 peekArray
+   (fromIntegral ∘ c'drmModeConnector'count_props) c'drmModeConnector'props)
+  (liftM2 peekArray
+   (fromIntegral ∘ c'drmModeConnector'count_props) c'drmModeConnector'prop_values)
+  <=< getConnector
+
+connectorEncoders ∷ (RDrm drm) ⇒ Connector drm → IO [Encoder drm]
+connectorEncoders =
+  fmap (fmap EncoderId) ∘ liftM2 peekArray
+  (fromIntegral ∘ c'drmModeConnector'count_encoders) c'drmModeConnector'encoders
+  <=< getConnector
 
 getConnector ∷ (RDrm drm) ⇒
-                ConnectorId drm → IO (Connector drm)
+  Connector drm → IO C'drmModeConnector
 getConnector cId = do
   ptr ← throwErrnoIfNull "drmModeGetConnector" $
-         applyDrm c'drmModeGetConnector cId
-  connector ← cToConnector =≪ peek ptr
+    applyDrm c'drmModeGetConnector cId
+  connector ← peek ptr
   c'drmModeFreeConnector ptr
   return connector
 
@@ -69,8 +93,8 @@ connectionEnum = [
   (c'DRM_MODE_DISCONNECTED, Disconnected) ,
   (c'DRM_MODE_UNKNOWNCONNECTION, UnknownConnection) ]
 
-isConnected ∷ Connector drm → Bool
-isConnected = (≡ Connected) ∘ connectorConnection
+isConnected ∷ RDrm drm ⇒ Connector drm → IO Bool
+isConnected = fmap (≡Connected) ∘ connectorConnection
 
 data SubPixel = UnknownSubPixel | HorizontalRGB | HorizontalBGR | VerticalRGB | VerticalBGR | None deriving (Show, Eq)
 
