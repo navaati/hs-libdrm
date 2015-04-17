@@ -11,10 +11,12 @@ module System.DRM.KMS.Crtc
        , setCrtc
        ) where
 
-import FunctionalTools.Unicode
+import Prelude.Unicode
+import Control.Arrow.Unicode((⋙))
 import Foreign
 import Foreign.C.Error
 import Data.List(genericLength)
+import Control.Arrow((&&&))
 
 import System.DRM.C.KMS.Crtc
 import System.DRM.KMS.ModeInfo

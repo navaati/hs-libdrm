@@ -4,7 +4,8 @@
 
 module System.DRM.KMS.Utils where
 
-import FunctionalTools.Unicode
+import Control.Arrow.Unicode((⋙))
+import Control.Monad((>=>),filterM)
 
 import System.DRM.Types
 import System.DRM.KMS.Resources

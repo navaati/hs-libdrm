@@ -1,7 +1,7 @@
 {-# LANGUAGE UnicodeSyntax #-}
 {-# LANGUAGE FlexibleContexts #-}
 
-import FunctionalTools.Unicode
+import Control.Monad.Unicode
 
 import System.DRM
 import System.DRM.KMS.Utils
@@ -18,7 +18,7 @@ main = withDrm "/dev/dri/card0" $ \p → do
   Just oldFb ← crtcFb (crtc `withSameTagAs` p)
   oldPosition ← crtcPosition crtc
   let (w,h) = modeDisplay mode
-  
+
   myBO ← let fI = fromIntegral in createDumbBO (fI w) (fI h)
   myFb ← addFb myBO
   setCrtc crtc myFb (0,0) [conn] mode

@@ -16,14 +16,16 @@ module System.DRM.KMS.Connector
        , isConnected
        , SubPixel(..)
        , ConnectorType(..)
-       , Property(..)
+       , Property
        ) where
 
-import FunctionalTools.Unicode
+import Prelude.Unicode
 
 import Foreign
 import Foreign.C
 import Data.Maybe(fromJust)
+import Control.Monad((<=<),liftM2)
+import Control.Arrow((&&&))
 
 import System.DRM.C.KMS.Connector
 import System.DRM.Types

@@ -29,7 +29,7 @@ library
                  ,System.DRM.C.KMS.FrameBuffer
   c-sources: src/cbits/dumb_mmap.c
   build-depends: base
-                 ,func-tools
+                 ,base-unicode-symbols
                  ,unix
                  ,tagged
                  ,reflection

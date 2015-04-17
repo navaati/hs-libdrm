@@ -13,11 +13,12 @@ module System.DRM.KMS.FrameBuffer
        , rmFb
        ) where
 
-import FunctionalTools.Unicode
+import Prelude.Unicode
 import Foreign
 import Foreign.C.Error
 import Data.Reflection
 import Data.Proxy
+import Control.Arrow((&&&))
 
 import System.DRM.C.KMS.FrameBuffer
 import System.DRM.Types

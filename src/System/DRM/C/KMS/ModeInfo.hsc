@@ -10,7 +10,7 @@
 
 module System.DRM.C.KMS.ModeInfo (C'drmModeModeInfo,cToModeInfo,modeInfoToC) where
 #strict_import
-import FunctionalTools.Unicode
+import Prelude.Unicode
 import Foreign.C.String(castCCharToChar,castCharToCChar)
 import System.DRM.FFIUtils
 

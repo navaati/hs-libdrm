@@ -7,7 +7,7 @@
 
 module System.DRM.KMS.Resources (Resources(..), getResources) where
 
-import FunctionalTools.Unicode
+import Control.Monad.Unicode((=≪))
 import Foreign
 import Foreign.C
 import Data.Reflection

@@ -10,7 +10,7 @@ module System.DRM.KMS.Encoder
        , EncoderType(..)
        ) where
 
-import FunctionalTools.Unicode
+import Prelude.Unicode
 import Foreign
 import Foreign.C.Error
 import Data.Maybe(fromJust)
